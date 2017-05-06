@@ -1,1 +1,36 @@
-/* Empty. Add your own CSS if you like */
+
+.toRight {
+  float: right;
+}
+
+.car-item{
+  width: 40%;
+  height: 130px;
+}
+
+.car-item img{
+  width: 100%;
+  /*height: 85px;*/
+}
+
+ion-side-menu{
+  margin-top: 44px;
+}
+
+#photoGallery ion-item{
+  /*background-color: #0a9dc7;*/
+  /*max-width: 100px;*/
+  height: 170px;
+  /*background-color: #0c60ee;*/
+}
+
+#photoGallery ion-item img{
+  max-width: 100%;
+  max-height: 100%;
+  /*height: 70vh;*/
+  position:relative;
+  left: 0;
+  right: 0;
+  margin:0 auto;
+  top:25%;
+}

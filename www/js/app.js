@@ -1,5 +1,9 @@
 angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModule', 'btford.socket-io', 'angularMoment'])
+  .config(['$ionicConfigProvider', function($ionicConfigProvider) {
 
+    $ionicConfigProvider.tabs.position('bottom'); // other values: top
+
+  }])
   .config(function($stateProvider, $urlRouterProvider) {
 
     $stateProvider
