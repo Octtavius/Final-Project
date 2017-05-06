@@ -10,7 +10,8 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
       .state('tabs', {
         url: "/tab",
         abstract: true,
-        templateUrl: "templates/tabs.html"
+        templateUrl: "templates/tabs.html",
+        controller: "TabsCtrl"
       })
 
 
@@ -18,7 +19,8 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
         url: "/first",
         views: {
           'home-tab': {
-            templateUrl: "templates/first.html"
+            templateUrl: "templates/first.html",
+            controller: "firstCtrl"
           }
         }
       })
@@ -28,7 +30,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
         url: "/home/:id",
         views: {
           'home-tab': {
-            templateUrl: "templates/home.html",
+            templateUrl: "templates/car-details.html",
             controller: 'firstCtrl'
           }
         }
@@ -37,7 +39,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
         url: "/facts",
         views: {
           'home-tab': {
-            templateUrl: "templates/facts.html",
+            templateUrl: "templates/assistance-page.html",
             controller: 'AssistanceCtrl'
           }
         }
@@ -54,7 +56,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
         url: "/about",
         views: {
           'about-tab': {
-            templateUrl: "templates/about.html",
+            templateUrl: "templates/all-cars.html",
             controller: "AllCarsCtrl"
           }
         }
@@ -71,12 +73,18 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
         url: "/contact",
         views: {
           'contact-tab': {
-            templateUrl: "templates/contact.html",
+            templateUrl: "templates/photo-gallery.html",
             controller: "GalleryCtrl"
           }
         }
       });
     $urlRouterProvider.otherwise("/tab/home/112");
+  })
+  .controller("TabsCtrl", function ($scope, $ionicSideMenuDelegate) {
+    $scope.toggleRight = function () {
+      console.log("-=====");
+      $ionicSideMenuDelegate.toggleRight();
+    };
   })
   .controller("GalleryCtrl", function ($scope, cam, StorageService) {
     $scope.title = "My Photos";
@@ -96,10 +104,10 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
     $scope.title111 = "Assistance page"
   })
   .controller("AllCarsCtrl", function ($scope, Data) {
-    $scope.title = "Photo Gallery";
+    $scope.title = "All Cars";
     $scope.allCars = Data.getAllCars()
   })
-  .controller('firstCtrl', function($scope, Data, $state) {
+  .controller('firstCtrl', function($scope, Data, $state, cam) {
     var carId = $state.params.id;
     $scope.car = Data.carById(carId)
     // $scope.toggleRight = function () {
@@ -110,8 +118,12 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
 
     $scope.takePhoto = function () {
       console.log("take photo");
-      // cam.takePhoto()
+      cam.takePhoto()
     }
+    // $scope.toggleRight = function () {
+    //   console.log("-=====");
+    //   // $ionicSideMenuDelegate.toggleRight();
+    // };
   })
 
 
@@ -137,6 +149,12 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
         ngIf.link.apply(ngIf, arguments);
       }
     };
+  })
+  .directive("mySideMenu", function () {
+    return {
+      restrict: "E",
+      templateUrl: "templates/side-menu.html"
+    }
   })
   .factory("cam", function ($cordovaCamera, StorageService) {
   var allPic = [];

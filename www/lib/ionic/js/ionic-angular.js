@@ -4396,7 +4396,7 @@ IonicModule
  *         views: {
  *           'home-tab': {
  *             prefetchTemplate: false,
- *             templateUrl: "tabs-templates/home.html",
+ *             templateUrl: "tabs-templates/car-details.html",
  *             controller: 'HomeTabCtrl'
  *           }
  *         }
@@ -12058,7 +12058,7 @@ IonicModule
  *   $stateProvider
  *   .state('index', {
  *     url: '/',
- *     templateUrl: 'home.html'
+ *     templateUrl: 'car-details.html'
  *   })
  *   .state('music', {
  *     url: '/music',
@@ -12067,11 +12067,11 @@ IonicModule
  * });
  * ```
  * Then on app start, $stateProvider will look at the url, see if it matches the index state,
- * and then try to load home.html into the `<ion-nav-view>`.
+ * and then try to load car-details.html into the `<ion-nav-view>`.
  *
  * Pages are loaded by the URLs given. One simple way to create templates in Angular is to put
  * them directly into your HTML file and use the `<script type="text/ng-template">` syntax.
- * So here is one way to put home.html into our app:
+ * So here is one way to put car-details.html into our app:
  *
  * ```html
  * <script id="home" type="text/ng-template">

@@ -1,0 +1,23 @@
+<ion-view>
+  <ion-pane>
+    <ion-side-menus>
+      <ion-side-menu-content>
+        <ion-content>
+          <h3>{{title}}</h3>
+          <ion-list id="photoGallery">
+            <div ng-repeat="pic in things">
+              <div class="row" ng-if="$even">
+                <ion-item class="col">
+                  <img src="{{pic}}" class="icon" alt="Photo" temp>
+                </ion-item>
+                <ion-item class="col">
+                  <img src="{{things[$index+1]}}" class="icon" alt="Photo" temp>
+                </ion-item>
+              </div>
+            </div>
+          </ion-list>
+        </ion-content>
+      </ion-side-menu-content>
+      <my-side-menu></my-side-menu>
+  </ion-pane>
+</ion-view>

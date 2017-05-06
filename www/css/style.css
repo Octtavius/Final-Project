@@ -17,11 +17,11 @@ ion-side-menu{
   margin-top: 44px;
 }
 
+ion-content{
+  margin-top: 44px !important;
+}
 #photoGallery ion-item{
-  /*background-color: #0a9dc7;*/
-  /*max-width: 100px;*/
   height: 170px;
-  /*background-color: #0c60ee;*/
 }
 
 #photoGallery ion-item img{
