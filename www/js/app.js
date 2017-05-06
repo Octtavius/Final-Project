@@ -1,4 +1,4 @@
-angular.module('starter', ['ionic'])
+angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModule', 'btford.socket-io', 'angularMoment'])
 
   .config(function($stateProvider, $urlRouterProvider) {
 
@@ -74,7 +74,7 @@ angular.module('starter', ['ionic'])
       });
     $urlRouterProvider.otherwise("/tab/home/112");
   })
-  .controller("GalleryCtrl", function ($scope, cam) {
+  .controller("GalleryCtrl", function ($scope, cam, StorageService) {
     $scope.title = "My Photos";
     $scope.allpic = [];
 
@@ -134,7 +134,7 @@ angular.module('starter', ['ionic'])
       }
     };
   })
-.factory("cam", function ($cordovaCamera, StorageService) {
+  .factory("cam", function ($cordovaCamera, StorageService) {
   var allPic = [];
   var tp = function() {
     var options = {
@@ -163,3 +163,25 @@ angular.module('starter', ['ionic'])
     getAllFotos:allPic
   }
 })
+
+  .factory ('StorageService', function ($localStorage) {
+    $localStorage = $localStorage.$default({
+      things: []
+    });
+
+    var _getAll = function () {
+      return $localStorage.things;
+    };
+    var _add = function (thing) {
+      // console.log("adding:  " + thing);
+      $localStorage.things.push(thing);
+    }
+    var _remove = function (thing) {
+      $localStorage.things.splice($localStorage.things.indexOf(thing), 1);
+    }
+    return {
+      getAll: _getAll,
+      add: _add,
+      remove: _remove
+    };
+  })
