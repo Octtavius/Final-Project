@@ -1,0 +1,23 @@
+<ion-view title="About">
+  <ion-content class="padding">
+    <h3>Create hybrid mobile apps with the web technologies you love.</h3>
+    <p>Free and open source, Ionic offers a library of mobile-optimized HTML, CSS and JS components for building highly interactive apps.</p>
+    <p>Built with Sass and optimized for AngularJS.</p>
+    <p>
+      <a class="button icon icon-right ion-chevron-right" href="#/tab/navstack">Tabs Nav Stack</a>
+    </p>
+
+    <h2>{{title}}</h2>
+
+    <div  ng-repeat="car in allCars">
+      <div class="row" ng-if="$even">
+        <a href="#/tab/list/{{car.car_id}}" class="col car-item">
+          <img src="{{allCars[$index].imgUrl}}" class="icon" alt="Photo">
+        </a>
+        <a href="#/tab/list/{{allCars[$index + 1].car_id}}" class="col car-item">
+          <img src="{{allCars[$index + 1].imgUrl}}" class="icon" alt="Photo">
+        </a>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

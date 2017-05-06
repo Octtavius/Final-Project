@@ -1,0 +1,36 @@
+<ion-view title="Contact">
+  <ion-content>
+
+
+    <h3>{{title}}</h3>
+    <ion-list id="photoGallery">
+      <div ng-repeat="pic in things">
+
+        <div class="row" ng-if="$even">
+          <!--<a href="#/tab/list/{{car.car_id}}" class="col car-item">-->
+          <ion-item class="col">
+
+            <!--<img src="img/{{pic}}.JPG" class="icon" alt="Photo" temp>-->
+            <img src="{{pic}}" class="icon" alt="Photo" temp>
+          </ion-item>
+          <ion-item class="col">
+
+            <!--<img src="img/{{allpic[$index+1]}}.JPG" class="icon" alt="Photo">-->
+            <img src="{{things[$index+1]}}" class="icon" alt="Photo" temp>
+          </ion-item>
+          <!--</a>-->
+        </div>
+        <!--<img id="takenPhoto" src="img/{{pic}}.png" alt="">-->
+      </div>
+    </ion-list>
+    <!---->
+    <!--<div class="list">-->
+      <!--<div class="item">-->
+        <!--@IonicFramework-->
+      <!--</div>-->
+      <!--<div class="item">-->
+        <!--@DriftyTeam-->
+      <!--</div>-->
+    <!--</div>-->
+  </ion-content>
+</ion-view>
