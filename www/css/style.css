@@ -34,3 +34,11 @@ ion-content{
   margin:0 auto;
   top:25%;
 }
+
+.button-block{
+  width: 100%;
+}
+
+.assistanceBtn{
+  margin-top: 20% !important;
+}

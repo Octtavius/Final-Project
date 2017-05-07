@@ -3,15 +3,23 @@
     <ion-side-menus>
       <ion-side-menu-content>
         <ion-content>
-          <h1>{{title111}}</h1>
-          <p>Banging your head against a wall uses 150 calories an hour.</p>
-          <p>Dogs have four toes on their hind feet, and five on their front feet.</p>
-          <p>The ant can lift 50 times its own weight, can pull 30 times its own weight and always falls over on its right side when intoxicated.</p>
-          <p>A cockroach will live nine days without it's head, before it starves to death.</p>
-          <p>Polar bears are left handed.</p>
+          <h1>{{title}}</h1>
+          <p>If you need more information about a car, don't hesitate talking to one of our staff.</p>
+          <p>To get assistance, you simply need to tap on button and one of our members will approach you.</p>
+          <!--<p>A cockroach will live nine days without it's head, before it starves to death.</p>-->
+          <!--<p>Polar bears are left handed.</p>-->
           <p>
-            <a class="button icon ion-home" href="#/tab/home"> Home</a>
-            <a class="button icon icon-right ion-chevron-right" href="#/tab/facts2">More Facts</a>
+            <button
+              class="button assistanceBtn button-block"
+              ng-disabled="button.disabled"
+              ng-click="requestAssistance()"
+              ng-class="button.request.received ? 'button-balanced' : (!button.request.sent ? 'button-calm' : 'button-balanced')"
+            >
+              {{button.title}}
+            </button>
+            <button ng-click="cancelClientRequest()" class="button button-assertive button-block" ng-if="button.request.sent">Cancel request</button>
+            <!--<a class="button icon ion-home" href="#/tab/home"> Home</a>-->
+            <!--<a class="button icon icon-right ion-chevron-right" href="#/tab/facts2">More Facts</a>-->
           </p>
         </ion-content>
       </ion-side-menu-content>

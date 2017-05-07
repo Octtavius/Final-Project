@@ -5,7 +5,6 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
 
   }])
   .config(function($stateProvider, $urlRouterProvider) {
-
     $stateProvider
       .state('tabs', {
         url: "/tab",
@@ -81,6 +80,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
     $urlRouterProvider.otherwise("/tab/home/112");
   })
   .controller("TabsCtrl", function ($scope, $ionicSideMenuDelegate) {
+    $scope.title = "Interactive Cars"
     $scope.toggleRight = function () {
       console.log("-=====");
       $ionicSideMenuDelegate.toggleRight();
@@ -100,8 +100,61 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
     $scope.things = StorageService.getAll();
     console.log($scope.things.length);
   })
-  .controller("AssistanceCtrl", function ($scope) {
-    $scope.title111 = "Assistance page"
+  .controller("AssistanceCtrl", function ($scope, socketFactory) {
+    $scope.$on("$ionicView.afterEnter", function () {
+      $('#car-desc-tab').attr("disabled", true);
+
+    })
+    var onRequestSent = function () {
+      $scope.button.request.sent = true;
+      $scope.button.disabled = true;
+      $scope.button.title = "Assistance request sent";
+    };
+
+    $scope.theSocket = null;
+
+    // var getSocket = function () {
+    //   $scope.theSocket = SocketService.theSocket;
+    // };
+
+    // $scope.theSocket.on("message", function (data) {
+    //   console.log(data);
+    // })
+
+    $scope.button = {
+      title: "Get assistance",
+      request: {
+        sent: false,
+        received: false
+      },
+      disabled: false
+    };
+
+
+
+    $scope.title = "Assistance page";
+    $scope.requestAssistance = function () {
+      console.log("requestinnnin");
+      var msg = {
+        carId: "116",
+        carName: "LADA"
+      };
+      $scope.theSocket = socketFactory({ioSocket: io.connect('http://localhost:3000')});
+      // SocketService.connect();
+      $scope.theSocket.emit('send:request', msg);
+      onRequestSent();
+      $scope.theSocket.on("staff:reply", function (data) {
+        console.log(data);
+      })
+    };
+
+    $scope.cancelClientRequest = function () {
+      $scope.theSocket.emit('client:cancel:request');
+      $scope.button.request.sent = false;
+      $scope.button.disabled = false;
+    }
+
+
   })
   .controller("AllCarsCtrl", function ($scope, Data) {
     $scope.title = "All Cars";
