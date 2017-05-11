@@ -3,6 +3,17 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
     $ionicConfigProvider.tabs.position('bottom'); // other values: top
 
   }])
+  .run(function($ionicPlatform, BeaconsManager) {
+    $ionicPlatform.ready(function() {
+      if(window.cordova && window.cordova.plugins.Keyboard) {
+        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+      }
+      if(window.StatusBar) {
+        StatusBar.styleDefault();
+      }
+    });
+    BeaconsManager.range();
+  })
   .config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
       .state('tabs', {
