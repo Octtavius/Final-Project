@@ -12,7 +12,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
         StatusBar.styleDefault();
       }
     });
-    BeaconsManager.range();
+    // BeaconsManager.range();
   })
   .config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
@@ -89,12 +89,17 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
       });
     $urlRouterProvider.otherwise("/tab/home/111");
   })
-  .controller("TabsCtrl", function ($scope, $ionicSideMenuDelegate, BeaconsManager) {
+  .controller("TabsCtrl", function ($scope, $ionicSideMenuDelegate, cam) {
     $scope.title = "Interactive Cars"
     $scope.toggleRight = function () {
       console.log("-=====");
       $ionicSideMenuDelegate.toggleRight();
     };
+
+    $scope.takePhoto = function () {
+      console.log("take photo");
+      cam.takePhoto()
+    }
   })
   .controller("GalleryCtrl", function ($scope, cam, StorageService) {
     $scope.title = "My Photos";
@@ -149,12 +154,16 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
         carId: "116",
         carName: "LADA"
       };
-      $scope.theSocket = socketFactory({ioSocket: io.connect('http://localhost:3000')});
+      $scope.theSocket = socketFactory({ioSocket: io.connect('http://192.168.1.8:3000')});
       // SocketService.connect();
       $scope.theSocket.emit('send:request', msg);
       onRequestSent();
       $scope.theSocket.on("staff:reply", function (data) {
         console.log(data);
+      })
+
+      $scope.theSocket.on("staff:arrived", function () {
+        console.log("arrived mother fucker");
       })
     };
 
