@@ -1,6 +1,5 @@
 angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModule', 'btford.socket-io', 'angularMoment', 'ngCordovaBeacon'])
   .config(['$ionicConfigProvider', function($ionicConfigProvider) {
-
     $ionicConfigProvider.tabs.position('bottom'); // other values: top
 
   }])
@@ -79,7 +78,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
       });
     $urlRouterProvider.otherwise("/tab/home/112");
   })
-  .controller("TabsCtrl", function ($scope, $ionicSideMenuDelegate) {
+  .controller("TabsCtrl", function ($scope, $ionicSideMenuDelegate, BeaconsManager) {
     $scope.title = "Interactive Cars"
     $scope.toggleRight = function () {
       console.log("-=====");
