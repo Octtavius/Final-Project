@@ -138,7 +138,7 @@
         }
       },
       {
-        car_id: "114",
+        car_id: "217",
         imgUrl: "img/volkswagen_beetle.png",
         brand: {
           title: "Volkswagen",

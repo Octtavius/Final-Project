@@ -98,8 +98,8 @@
             updateNearestBeacon(data.beacons, $rootScope.nearestBeacon, function (result) {
               $rootScope.nearestBeacon = result;
               if(prevClosest != $rootScope.nearestBeacon) {
-                console.log("heyyyyyy");
-                $window.location.href = "#/tab/car/"+ $rootScope.nearestBeacon.minor;
+                console.log("#/tab/home/"+ $rootScope.nearestBeacon.minor);
+                $window.location.href = "#/tab/home/"+ $rootScope.nearestBeacon.minor;
                 // console.log("NEW BEACON");
                 // AnalyticsManager.exitAnalytics(prevClosest.minor);
                 // AnalyticsManager.arrivalAnalytics();

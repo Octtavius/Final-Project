@@ -87,7 +87,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
           }
         }
       });
-    $urlRouterProvider.otherwise("/tab/home/112");
+    $urlRouterProvider.otherwise("/tab/home/111");
   })
   .controller("TabsCtrl", function ($scope, $ionicSideMenuDelegate, BeaconsManager) {
     $scope.title = "Interactive Cars"
