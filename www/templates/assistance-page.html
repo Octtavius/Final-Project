@@ -7,17 +7,35 @@
           <p>If you need more information about a car, don't hesitate talking to one of our staff.</p>
           <p>To get assistance, you simply need to tap on button and one of our members will approach you.</p>
           <!--<p>A cockroach will live nine days without it's head, before it starves to death.</p>-->
-          <!--<p>Polar bears are left handed.</p>-->
+          <br>
+          <p>Your are now in front of the car: {{car.brand.title}} {{car.model.title}}</p>
           <p>
+            <!--ng-class="button.request.received ? 'button-balanced' : (!button.request.sent ? 'button-calm' : 'button-balanced')"-->
             <button
-              class="button assistanceBtn button-block"
+              ng-if="!metAssistanceBtn.display"
+              class="button assistanceBtn button-block button-calm"
               ng-disabled="button.disabled"
               ng-click="requestAssistance()"
-              ng-class="button.request.received ? 'button-balanced' : (!button.request.sent ? 'button-calm' : 'button-balanced')"
             >
               {{button.title}}
             </button>
-            <button ng-click="cancelClientRequest()" class="button button-assertive button-block" ng-if="button.request.sent">Cancel request</button>
+
+            <button
+              ng-if="metAssistanceBtn.display"
+              class="button assistanceBtn button-block button-calm"
+              ng-disabled="button.disabled"
+              ng-click="stopVibration()"
+            >
+              {{metAssistanceBtn.title}}
+            </button>
+
+            <button
+              ng-click="cancelClientRequest()"
+              class="button button-assertive button-block"
+              ng-if="button.request.sent"
+            >
+              Cancel request
+            </button>
             <!--<a class="button icon ion-home" href="#/tab/home"> Home</a>-->
             <!--<a class="button icon icon-right ion-chevron-right" href="#/tab/facts2">More Facts</a>-->
           </p>

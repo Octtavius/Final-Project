@@ -12,7 +12,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
         StatusBar.styleDefault();
       }
     });
-    // BeaconsManager.range();
+    BeaconsManager.range();
   })
   .config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
@@ -33,8 +33,6 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
           }
         }
       })
-
-
       .state('tabs.home', {
         url: "/home/:id",
         views: {
@@ -115,10 +113,12 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
     $scope.things = StorageService.getAll();
     console.log($scope.things.length);
   })
-  .controller("AssistanceCtrl", function ($scope, socketFactory) {
+  .controller("AssistanceCtrl", function ($scope, $rootScope, socketFactory, $cordovaVibration, $interval, Data) {
     $scope.$on("$ionicView.afterEnter", function () {
       $('#car-desc-tab').attr("disabled", true);
-
+      if($scope.nearestBeacon != null) {
+        $scope.car = Data.carById($rootScope.nearestBeacon.minor)
+      }
     })
     var onRequestSent = function () {
       $scope.button.request.sent = true;
@@ -126,15 +126,9 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
       $scope.button.title = "Assistance request sent";
     };
 
+
+
     $scope.theSocket = null;
-
-    // var getSocket = function () {
-    //   $scope.theSocket = SocketService.theSocket;
-    // };
-
-    // $scope.theSocket.on("message", function (data) {
-    //   console.log(data);
-    // })
 
     $scope.button = {
       title: "Get assistance",
@@ -145,30 +139,76 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
       disabled: false
     };
 
+    $scope.metAssistanceBtn = {
+      title: "I met the assistant",
+      display: false
+    };
 
+    var listenersSet = false;
 
-    $scope.title = "Assistance page";
-    $scope.requestAssistance = function () {
-      console.log("requestinnnin");
-      var msg = {
-        carId: "116",
-        carName: "LADA"
-      };
-      $scope.theSocket = socketFactory({ioSocket: io.connect('http://192.168.1.8:3000')});
-      // SocketService.connect();
-      $scope.theSocket.emit('send:request', msg);
-      onRequestSent();
+    var vibrationInterval = null;
+
+    var setListeners = function () {
+      $scope.theSocket = socketFactory({ioSocket: io.connect('http://10.182.95.233:3000')});
+      //staff cancel the request
       $scope.theSocket.on("staff:reply", function (data) {
+        console.log("staff replied");
         console.log(data);
       })
 
       $scope.theSocket.on("staff:arrived", function () {
-        console.log("arrived mother fucker");
+        //change text back
+        $scope.button.title =  "Get assistance";
+        $scope.button.disabled = false;
+        $scope.metAssistanceBtn.display = true;
+
+        vibrationInterval = $interval(function () {
+          $cordovaVibration.vibrate(300)
+        }, 800)
+        // Vibrate 100ms
+      });
+      $scope.theSocket.on("staff:accepted:request", function () {
+        $scope.button.title = "Assistance is on its way"
       })
+    };
+
+    var hideMetAssistantBtn = function () {
+      $scope.metAssistanceBtn.display = false;
+    };
+
+    $scope.stopVibration = function () {
+      $interval.cancel(vibrationInterval);
+      hideMetAssistantBtn();
+      $scope.button.request.sent = false;
+    }
+
+    $scope.title = "Assistance page";
+    $scope.requestAssistance = function () {
+      console.log("requestinnnin");
+
+      if($rootScope.nearestBeacon != null) {
+        if(!listenersSet) {
+          console.log("setListeneres...");
+          setListeners();
+          listenersSet = true;
+        }
+        var msg = {
+          carId: $scope.car.car_id,
+          carName: $scope.car.brand.title + " " + $scope.car.model.title
+        };
+        $scope.theSocket.emit('send:request', msg);
+        onRequestSent();
+      }
+      else {
+
+      }
     };
 
     $scope.cancelClientRequest = function () {
       $scope.theSocket.emit('client:cancel:request');
+      if(vibrationInterval !== null) {
+        $interval.cancel(vibrationInterval)
+      }
       $scope.button.request.sent = false;
       $scope.button.disabled = false;
     }

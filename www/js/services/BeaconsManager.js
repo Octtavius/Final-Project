@@ -1,7 +1,7 @@
 (function () {
   var module = angular.module('starter');
 
-  var BeaconManager = function ($rootScope, $ionicPlatform, $cordovaBeacon, $compile, $window) {
+  var BeaconManager = function ($rootScope, $ionicPlatform, $cordovaBeacon, $compile, $window, $state) {
     //the counter will be used to collect how many beacons are in range... if 10 results will all be 0
     //then it means that device is not in range. now every half or 1 second, I get a number about how many
     //beacons are in range. because of internet, it somethime might show that there is 0 beacons even if there is
@@ -83,6 +83,7 @@
 
 
           for(var i = 0; i < data.beacons.length; i++) {
+            if(($state.is('tabs.home'))) {
             uniqueBeaconKey = data.beacons[i].uuid + ":" + data.beacons[i].major + ":" + data.beacons[i].minor;
             //set nereast beacon to be any beacon which is detected first by the app.
             console.log("ranging: ");
@@ -98,9 +99,11 @@
             updateNearestBeacon(data.beacons, $rootScope.nearestBeacon, function (result) {
               $rootScope.nearestBeacon = result;
               if(prevClosest != $rootScope.nearestBeacon) {
-                console.log("#/tab/home/"+ $rootScope.nearestBeacon.minor);
-                $window.location.href = "#/tab/home/"+ $rootScope.nearestBeacon.minor;
-                // console.log("NEW BEACON");
+                // console.log("#/tab/home/"+ $rootScope.nearestBeacon.minor);
+                console.log($state.current.name);
+
+                  $window.location.href = "#/tab/home/"+ $rootScope.nearestBeacon.minor;
+
                 // AnalyticsManager.exitAnalytics(prevClosest.minor);
                 // AnalyticsManager.arrivalAnalytics();
                 prevClosest = $rootScope.nearestBeacon;
@@ -110,6 +113,7 @@
 
             //update nearest RSSI
             trackAndUpdateNearestRSSI(data.beacons[i]);
+            }
           }
 
           //if there is 0 beacons increase counter. if counter will become 10 it is more than real taht
