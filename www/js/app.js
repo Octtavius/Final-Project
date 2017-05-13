@@ -149,12 +149,12 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
     var vibrationInterval = null;
 
     var setListeners = function () {
-      $scope.theSocket = socketFactory({ioSocket: io.connect('http://10.182.95.233:3000')});
+      $scope.theSocket = socketFactory({ioSocket: io.connect('http://192.168.1.8:3000')});
       //staff cancel the request
       $scope.theSocket.on("staff:reply", function (data) {
         console.log("staff replied");
         console.log(data);
-      })
+      });
 
       $scope.theSocket.on("staff:arrived", function () {
         //change text back

@@ -8,6 +8,8 @@
   <allow-navigation href="http://ionic.local/*"/>
   <allow-navigation href="http://192.168.1.8:8100"/>
   <allow-navigation href="http://10.182.95.233:8100"/>
+  <allow-navigation href="http://192.168.225.50:8100"/>
+  <allow-navigation href="http://192.168.43.108:8100"/>
   <allow-intent href="http://*/*"/>
   <allow-intent href="https://*/*"/>
   <allow-intent href="tel:*"/>
