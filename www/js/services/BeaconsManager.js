@@ -83,37 +83,36 @@
 
 
           for(var i = 0; i < data.beacons.length; i++) {
-            if(($state.is('tabs.home'))) {
             uniqueBeaconKey = data.beacons[i].uuid + ":" + data.beacons[i].major + ":" + data.beacons[i].minor;
             //set nereast beacon to be any beacon which is detected first by the app.
             console.log("ranging: ");
-
 
             $rootScope.beacons[uniqueBeaconKey] = data.beacons[i];
             if($rootScope.nearestBeacon == null) {
               $rootScope.nearestBeacon = data.beacons[i];
             }
-            else {
-              console.log('it is not null' + $rootScope.nearestBeacon.minor);
-            }
+            // else {
+            //   console.log('it is not null' + $rootScope.nearestBeacon.minor);
+            // }
+
             updateNearestBeacon(data.beacons, $rootScope.nearestBeacon, function (result) {
               $rootScope.nearestBeacon = result;
               if(prevClosest != $rootScope.nearestBeacon) {
                 // console.log("#/tab/home/"+ $rootScope.nearestBeacon.minor);
                 console.log($state.current.name);
+                if(($state.is('tabs.home'))) {
 
-                  $window.location.href = "#/tab/home/"+ $rootScope.nearestBeacon.minor;
-
+                  $window.location.href = "#/tab/home/" + $rootScope.nearestBeacon.minor;
+                }
                 // AnalyticsManager.exitAnalytics(prevClosest.minor);
                 // AnalyticsManager.arrivalAnalytics();
                 prevClosest = $rootScope.nearestBeacon;
               }
-              $compile($('#nearestB'))($rootScope)
+              // $compile($('#nearestB'))($rootScope)
             });
 
             //update nearest RSSI
             trackAndUpdateNearestRSSI(data.beacons[i]);
-            }
           }
 
           //if there is 0 beacons increase counter. if counter will become 10 it is more than real taht

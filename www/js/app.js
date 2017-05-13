@@ -3,7 +3,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
     $ionicConfigProvider.tabs.position('bottom'); // other values: top
 
   }])
-  .run(function($ionicPlatform, BeaconsManager) {
+  .run(function($ionicPlatform, BeaconsManager, $rootScope, AnalyticsServices) {
     $ionicPlatform.ready(function() {
       if(window.cordova && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -13,6 +13,37 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
       }
     });
     BeaconsManager.range();
+
+      $rootScope.$watch('nearestBeacon', function (nearestBeacon, previousBeacon) {
+        if(nearestBeacon != undefined && previousBeacon === undefined) {
+          // $scope.beaconType = 1;
+          AnalyticsServices.enterRegion();
+        } else if (nearestBeacon != undefined && previousBeacon != undefined) {
+          // $scope.beaconType = 2;
+          AnalyticsServices.exitRegion(previousBeacon);
+          AnalyticsServices.enterRegion();
+        } else if (nearestBeacon === undefined && previousBeacon != undefined) {
+          // $scope.beaconType = 3;
+          AnalyticsServices.exitRegion(previousBeacon);
+        }
+        // $scope.counter++;
+        // clearTimeout(timeoutCode);
+
+        // timeoutCode = setTimeout(function () {
+        //   if(nearestBeacon != undefined && previousBeacon === undefined) {
+        //     $scope.beaconType = 1;
+        //     arrivalAnalytics();
+        //   } else if (nearestBeacon != undefined && previousBeacon != undefined) {
+        //     $scope.beaconType = 2;
+        //     exitAnalytics(previousBeacon, arriveTime, exitTime);
+        //     arrivalAnalytics()
+        //   } else if (nearestBeacon === undefined && previousBeacon != undefined) {
+        //     $scope.beaconType = 3;
+        //     exitAnalytics(previousBeacon, arriveTime, exitTime);
+        //   }
+        // }, 10000);
+
+      }, true)
   })
   .config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
