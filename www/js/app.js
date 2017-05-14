@@ -26,23 +26,6 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
           // $scope.beaconType = 3;
           AnalyticsServices.exitRegion(previousBeacon);
         }
-        // $scope.counter++;
-        // clearTimeout(timeoutCode);
-
-        // timeoutCode = setTimeout(function () {
-        //   if(nearestBeacon != undefined && previousBeacon === undefined) {
-        //     $scope.beaconType = 1;
-        //     arrivalAnalytics();
-        //   } else if (nearestBeacon != undefined && previousBeacon != undefined) {
-        //     $scope.beaconType = 2;
-        //     exitAnalytics(previousBeacon, arriveTime, exitTime);
-        //     arrivalAnalytics()
-        //   } else if (nearestBeacon === undefined && previousBeacon != undefined) {
-        //     $scope.beaconType = 3;
-        //     exitAnalytics(previousBeacon, arriveTime, exitTime);
-        //   }
-        // }, 10000);
-
       }, true)
   })
   .config(function($stateProvider, $urlRouterProvider) {
@@ -169,7 +152,6 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
       },
       disabled: false
     };
-
     $scope.metAssistanceBtn = {
       title: "I met the assistant",
       display: false
@@ -179,12 +161,26 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
 
     var vibrationInterval = null;
 
+    function updateUIonCancel() {
+      if(vibrationInterval !== null) {
+        $interval.cancel(vibrationInterval)
+      }
+
+      vibrationInterval = null;
+      $scope.button.request.sent = false;
+      $scope.button.title = "Assistance request sent";
+      $scope.button.disabled = false;
+      $scope.metAssistanceBtn.display = false
+    }
+
     var setListeners = function () {
       $scope.theSocket = socketFactory({ioSocket: io.connect('http://192.168.1.8:3000')});
       //staff cancel the request
-      $scope.theSocket.on("staff:reply", function (data) {
-        console.log("staff replied");
-        console.log(data);
+      $scope.theSocket.on("staff:reply", function () {
+        $interval.cancel(vibrationInterval);
+        vibrationInterval = null;
+        hideMetAssistantBtn();
+        $scope.button.request.sent = false;
       });
 
       $scope.theSocket.on("staff:arrived", function () {
@@ -193,13 +189,18 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
         $scope.button.disabled = false;
         $scope.metAssistanceBtn.display = true;
 
-        vibrationInterval = $interval(function () {
-          $cordovaVibration.vibrate(300)
-        }, 800)
+        if(vibrationInterval === null) {
+          vibrationInterval = $interval(function () {
+            $cordovaVibration.vibrate(300)
+          }, 800)
+        }
         // Vibrate 100ms
       });
       $scope.theSocket.on("staff:accepted:request", function () {
         $scope.button.title = "Assistance is on its way"
+      });
+      $scope.theSocket.on("staff:canceled:request", function () {
+        updateUIonCancel();
       })
     };
 
@@ -209,9 +210,12 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
 
     $scope.stopVibration = function () {
       $interval.cancel(vibrationInterval);
+      vibrationInterval = null;
       hideMetAssistantBtn();
       $scope.button.request.sent = false;
-    }
+      $scope.theSocket.emit('met:assistant');
+      console.log("assitant met");
+    };
 
     $scope.title = "Assistance page";
     $scope.requestAssistance = function () {
@@ -234,23 +238,18 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
 
       }
     };
-
     $scope.cancelClientRequest = function () {
       $scope.theSocket.emit('client:cancel:request');
-      if(vibrationInterval !== null) {
-        $interval.cancel(vibrationInterval)
-      }
-      $scope.button.request.sent = false;
-      $scope.button.disabled = false;
+      updateUIonCancel();d
     }
-
-
   })
   .controller("AllCarsCtrl", function ($scope, Data) {
     $scope.title = "All Cars";
     $scope.allCars = Data.getAllCars()
   })
-  .controller('firstCtrl', function($scope, Data, $state, cam) {
+  .controller('firstCtrl', function($scope, Data, $state, cam, $rootScope) {
+
+
     var carId = $state.params.id;
     $scope.car = Data.carById(carId)
     // $scope.toggleRight = function () {
@@ -268,7 +267,6 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
     //   // $ionicSideMenuDelegate.toggleRight();
     // };
   })
-
 
   .directive('showTabs', function(ngIfDirective) {
     var ngIf = ngIfDirective[0];

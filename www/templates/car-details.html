@@ -13,10 +13,7 @@
                   ng-click="toggleRight()"></button>
         </ion-header-bar>
         <ion-content>
-          <!--<a href="#/tab/assistance" class="button">-->
-          <!--got to tabs page-->
-          <!--</a>-->
-          <ion-list>
+          <ion-list ng-show="inRange" id="carDesc">
             <ion-item class="item-image">
               <img src="{{car.imgUrl}}" class="icon" alt="Photo">
             </ion-item>
@@ -87,6 +84,24 @@
               <img src="img/weigthIcon.png" class="icon non-ionic-icon" alt="Photo">
             </ion-item>
           </ion-list>
+          <div ng-show="!inRange">
+            <div class="card">
+
+              <div class="presentationIcons">
+                <div class="close">
+                  <button class="cardButton" ng-click="$ionicGoBack()"><i class="icon ion-close card-icon"></i></button>
+                </div>
+              </div>
+
+              <div class="presentation">
+                <h3 class="text-center">You are out of beacons range!</h3>
+                <p class="text-center">Go to the car event or show room in order to see content of this page.</p>
+                <div class="item-image padding">
+                  <img class="outofrange" src="img/connection-search.gif"/>
+                </div>
+              </div>
+            </div>
+          </div>
         </ion-content>
       </ion-side-menu-content>
 

@@ -80,37 +80,42 @@
         //listen to the broadcast.....
         $rootScope.$on("$cordovaBeacon:didRangeBeaconsInRegion", function (event, data) {
           var uniqueBeaconKey;
-
+          console.log("heyy beacon: " + counter);
 
           for(var i = 0; i < data.beacons.length; i++) {
             uniqueBeaconKey = data.beacons[i].uuid + ":" + data.beacons[i].major + ":" + data.beacons[i].minor;
             //set nereast beacon to be any beacon which is detected first by the app.
-            console.log("ranging: ");
+            if($rootScope.nearestBeacon != null) {
+              console.log("ranging: " + $rootScope.nearestBeacon.minor);
+            }
 
             $rootScope.beacons[uniqueBeaconKey] = data.beacons[i];
             if($rootScope.nearestBeacon == null) {
               $rootScope.nearestBeacon = data.beacons[i];
             }
-            // else {
-            //   console.log('it is not null' + $rootScope.nearestBeacon.minor);
-            // }
-
             updateNearestBeacon(data.beacons, $rootScope.nearestBeacon, function (result) {
               $rootScope.nearestBeacon = result;
               if(prevClosest != $rootScope.nearestBeacon) {
-                // console.log("#/tab/home/"+ $rootScope.nearestBeacon.minor);
-                console.log($state.current.name);
-                if(($state.is('tabs.home'))) {
+                //
+                // console.log("================");
+                // console.log($rootScope.inRange);
+                // console.log("================");
 
+                // // console.log("#/tab/home/"+ $rootScope.nearestBeacon.minor);
+                // $rootScope.$on('$stateChangeSuccess', function (ev, to, toParams, from, fromParams) {
+                //   // if($state.current.name === "tabs.facts" && from.name !== "tabs.home") {
+                //   //   $state.go("tabs.home")
+                //   // }
+                //   // console.log(Object.keys(from)[1]);
+                //   // console.log(Object.keys(from)[2]);
+                //
+                // });
+                if(($state.is('tabs.home'))) {
                   $window.location.href = "#/tab/home/" + $rootScope.nearestBeacon.minor;
                 }
-                // AnalyticsManager.exitAnalytics(prevClosest.minor);
-                // AnalyticsManager.arrivalAnalytics();
                 prevClosest = $rootScope.nearestBeacon;
               }
-              // $compile($('#nearestB'))($rootScope)
             });
-
             //update nearest RSSI
             trackAndUpdateNearestRSSI(data.beacons[i]);
           }
@@ -119,20 +124,30 @@
           //the device is out of range. Otherwise if a beacon appeared for a while in range, than it means user
           //is in range
           if(data.beacons.length == 0) {
-            counter ++;
+            if(counter <= 10) {
+              counter ++;
+            }
           }
           else {
-            counter = 0;
+            if(counter > 0) {
+              counter = 0;
+            }
             if (!$rootScope.inRange) {
               $rootScope.inRange = true;
+              $compile($('#carDesc'))($rootScope)
+
             }
           }
 
           // if counter became 10 or higher, show that device is out of range, display a message
           if(counter >= 10) {
 
-            $rootScope.inRange = false;
-            $rootScope.nearestBeacon = null;
+            if($rootScope.inRange !== false) {
+              console.log("inragne is true");
+              $rootScope.inRange = false;
+              $rootScope.nearestBeacon = null;
+              $compile($('#carDesc'))($rootScope)
+            }
           }
         });
 

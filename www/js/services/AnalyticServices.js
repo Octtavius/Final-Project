@@ -34,6 +34,7 @@
     }
 
     function saveRecord(enterTime, exitTime, beaconId) {
+      console.log("++++  adding analytics");
 
       if(beaconId != undefined) {
         var record = {
@@ -41,13 +42,15 @@
           "exitTime": exitTime,
           "beaconId": beaconId
         };
-
         records.push(record);
+
+        if(records.length > 5) {
+          console.log("we have 5 records. save to cloud");
+        }
 
         // console.dir(records);
       }
     }
-
     // function analyticsPermitted() {
     //   return analyticsEnabled;
     // }
