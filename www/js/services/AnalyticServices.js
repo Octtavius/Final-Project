@@ -33,6 +33,7 @@
       }
     }
 
+
     function saveRecord(enterTime, exitTime, beaconId) {
       console.log("++++  adding analytics");
 
