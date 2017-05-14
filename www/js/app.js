@@ -130,7 +130,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
     $scope.things = StorageService.getAll();
     console.log($scope.things.length);
   })
-  .controller("AssistanceCtrl", function ($scope, $rootScope, socketFactory, $cordovaVibration, $interval, Data) {
+  .controller("AssistanceCtrl", function ($scope, $ionicPlatform, $ionicPopup, $rootScope, socketFactory, $cordovaVibration, $interval, Data) {
     $scope.$on("$ionicView.afterEnter", function () {
       $('#car-desc-tab').attr("disabled", true);
       if($scope.nearestBeacon != null) {
@@ -222,24 +222,42 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
 
     $scope.title = "Assistance page";
     $scope.requestAssistance = function () {
-      console.log("requestinnnin");
 
-      if($rootScope.nearestBeacon != null) {
-        if(!listenersSet) {
-          console.log("setListeneres...");
-          setListeners();
-          listenersSet = true;
+      if(window.Connection) {
+        if(navigator.connection.type == Connection.NONE) {
+          $ionicPopup.alert({
+            title: "Internet Disconnected",
+            content: "The internet is disconnected on your device."
+          })
+            // .then(function(result) {
+            //   if(!result) {
+            //     $ionicPlatform.exitApp();
+            //   }
+            // });
         }
-        var msg = {
-          carId: $scope.car.car_id,
-          carName: $scope.car.brand.title + " " + $scope.car.model.title
-        };
-        $scope.theSocket.emit('send:request', msg);
-        onRequestSent();
-      }
-      else {
+        else{
+          console.log("END");
 
+          if($rootScope.nearestBeacon != null) {
+            if(!listenersSet) {
+              console.log("setListeneres...");
+              setListeners();
+              listenersSet = true;
+            }
+            var msg = {
+              carId: $scope.car.car_id,
+              carName: $scope.car.brand.title + " " + $scope.car.model.title
+            };
+            $scope.theSocket.emit('send:request', msg);
+            onRequestSent();
+          }
+          else {
+
+          }
+        }
       }
+
+
     };
     $scope.cancelClientRequest = function () {
       $scope.theSocket.emit('client:cancel:request');
