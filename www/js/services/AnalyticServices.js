@@ -5,7 +5,7 @@
 (function () {
   var module = angular.module('starter');
 
-  var AnalyticsService = function () {
+  var AnalyticsService = function (recordService) {
 
     // var analyticsEnabled = false;
 
@@ -40,13 +40,25 @@
         var record = {
           "enterTime": enterTime,
           "exitTime": exitTime,
-          "beaconId": beaconId
+          "beaconId": beaconId.minor
         };
-        records.push(record);
 
-        if(records.length > 5) {
-          console.log("we have 5 records. save to cloud");
-        }
+        recordService.addRecord(record)
+        // // Get all birthday records from the database.
+        // recordService.getAllRecords().then(function(records) {
+        //   var recs = records;
+        //   console.log("--------DB 11--------------");
+        //   console.log(typeof recs);
+        //   // console.log(Object.keys(recs)[0]);
+        //   // console.log(Object.keys(recs)[1]);
+        //   // console.log(Object.keys(recs)[2]);
+        //   console.log("--------DB111 --------------");
+        // });
+        // records.push(record);
+
+        // if(records.length > 5) {
+        //   console.log("we have 5 records. save to cloud");
+        // }
 
         // console.dir(records);
       }
@@ -64,5 +76,5 @@
     }
   };
 
-  module.factory('AnalyticsServices', AnalyticsService);
+  module.factory('AnalyticsServices', ['recordService', AnalyticsService]);
 }());

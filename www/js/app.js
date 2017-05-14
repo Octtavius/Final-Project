@@ -3,7 +3,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
     $ionicConfigProvider.tabs.position('bottom'); // other values: top
 
   }])
-  .run(function($ionicPlatform, BeaconsManager, $rootScope, AnalyticsServices) {
+  .run(function($ionicPlatform, BeaconsManager, $rootScope, AnalyticsServices, recordService) {
     $ionicPlatform.ready(function() {
       if(window.cordova && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -12,6 +12,21 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
         StatusBar.styleDefault();
       }
     });
+
+    recordService.initDB();
+
+    // Get all birthday records from the database.
+    recordService.getAllRecords().then(function(records) {
+      var recs = records;
+      console.log("--------DB --------------");
+      for (var i = 0; i < recs.length; i++) {
+        console.log(Object.keys(recs[i].beaconId)[0]);
+        console.log(Object.keys(recs[i].beaconId)[1]);
+        console.log(Object.keys(recs[i].beaconId)[2]);
+      }
+      console.log("--------DB --------------");
+    });
+
     BeaconsManager.range();
 
       $rootScope.$watch('nearestBeacon', function (nearestBeacon, previousBeacon) {
