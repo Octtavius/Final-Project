@@ -44,6 +44,10 @@
         };
 
         recordService.addRecord(record)
+
+        recordService.syncRemoteDb()
+
+
         // // Get all birthday records from the database.
         // recordService.getAllRecords().then(function(records) {
         //   var recs = records;

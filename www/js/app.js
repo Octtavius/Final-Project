@@ -15,18 +15,6 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
 
     recordService.initDB();
 
-    // Get all birthday records from the database.
-    recordService.getAllRecords().then(function(records) {
-      var recs = records;
-      console.log("--------DB --------------");
-      for (var i = 0; i < recs.length; i++) {
-        console.log(Object.keys(recs[i].beaconId)[0]);
-        console.log(Object.keys(recs[i].beaconId)[1]);
-        console.log(Object.keys(recs[i].beaconId)[2]);
-      }
-      console.log("--------DB --------------");
-    });
-
     BeaconsManager.range();
 
       $rootScope.$watch('nearestBeacon', function (nearestBeacon, previousBeacon) {
@@ -255,7 +243,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
     };
     $scope.cancelClientRequest = function () {
       $scope.theSocket.emit('client:cancel:request');
-      updateUIonCancel();d
+      updateUIonCancel();
     }
   })
   .controller("AllCarsCtrl", function ($scope, Data) {

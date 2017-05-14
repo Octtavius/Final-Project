@@ -2,7 +2,7 @@ angular.module('starter').factory('recordService', ['$q', recordService]);
 
 function recordService($q) {
     var _db;
-
+    var remoteDB;
     // We'll need this later.
     var _records;
 
@@ -71,7 +71,47 @@ function recordService($q) {
     function initDB() {
         // Creates the database or opens if it already exists
         _db = new PouchDB('records');
+      console.log(_db.adapter);
+      remoteDB = new PouchDB('https://couchdb-77cd9f.smileupps.com/records');
+      // remoteDB = new PouchDB('http://192.168.1.8:5984/records');
     };
+
+    var sync = function () {
+      _db
+        .replicate
+        .to(remoteDB)
+        .on('complete', function () {
+          console.log("syncing......");
+          // local changes replicated to remote
+        }).on('error', function (err) {
+        // error while replicating
+        console.log("error syunc......\n", err);
+        // console.log(err.status);
+        // console.log(err.name);
+        // console.log(err.message);
+        // console.log(err.result);
+        // console.log('.......error.result..........');
+        // // console.log(Object.keys(err.result)[0]);
+        // // console.log(Object.keys(err.result)[1]);
+        // // console.log(Object.keys(err.result)[2]);
+        // // console.log(Object.keys(err.result)[3]);
+        // // console.log(Object.keys(err.result)[4]);
+        // // console.log(Object.keys(err.result)[5]);
+        // // console.log(Object.keys(err.result)[6]);
+        // // console.log(Object.keys(err.result)[7]);
+        // // console.log(Object.keys(err.result)[8]);
+        // // console.log(Object.keys(err.result)[9]);
+        // console.log(err.result.ok);
+        // console.log(err.result.start_time);
+        // console.log(err.result.docs_written);
+        // console.log(err.result.doc_write_failures);
+        // console.log(err.result.errors);
+        // console.log(err.result.status);
+        // console.log(err.result.end_time);
+        // console.log(err.result.last_seq);
+        // console.log("end err sync==================");
+      })
+    }
 
 
   return {
@@ -80,7 +120,8 @@ function recordService($q) {
     // We'll add these later.
     getAllRecords: getAllRecords,
     addRecord: addRecord,
-    deleteRecord: deleteRecord
+    deleteRecord: deleteRecord,
+    syncRemoteDb: sync
   };
 }
 
