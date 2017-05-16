@@ -1,0 +1,95 @@
+<ion-view title="Interactive Exploring">
+  <ion-pane>
+    <ion-side-menus>
+      <ion-side-menu-content>
+        <ion-header-bar class="bar-stable" ng-controller="TabsCtrl">
+
+          <p>
+            <a class="button icon ion-person-stalker" href="#/tab/facts"></a>
+          </p>
+          <h1 class="title">{{title}}</h1>
+          <!--<button class="icon ion-navicon button button-clear"></button>-->
+          <button class="button icon button-clear ion-navicon-round"
+                  ng-click="toggleRight()"></button>
+        </ion-header-bar>
+        <ion-content class="carInfo">
+            <title>{{title}}</title>
+          <ion-list id="carDesc">
+            <ion-item class="item-image">
+              <i class="icon ion-arrow-left-c myBackBtn" ng-click="myGoBack()"></i>
+              <img src="{{car.imgUrl}}" class="icon carImg" alt="Photo">
+            </ion-item>
+
+            <ion-item class="item-icon-left">
+              <p class="toRight">{{car.brand.title}}</p>
+              <i class="icon {{car.brand.icon}}"></i>
+            </ion-item>
+            <ion-item class="item-icon-left">
+              <p class="toRight">
+                {{car.model.title}}
+              </p>
+              <i class="icon {{car.model.icon}}"></i>
+            </ion-item>
+            <ion-item class="item-icon-left">
+              <p class="toRight">
+                {{car.engine.title}}
+              </p>
+              <img src="img/engine.png" class="icon padding non-ionic-icon" alt="Photo">
+            </ion-item>
+            <ion-item class="item-icon-left">
+              <p class="toRight">
+                {{car.price.title}}
+              </p>
+
+              <i class="icon {{car.price.icon}}"></i>
+            </ion-item>
+            <ion-item class="item-icon-left">
+              <p class="toRight">
+                {{car.year.title}}
+              </p>
+              <i class="icon {{car.year.icon}}"></i>
+            </ion-item>
+            <ion-item class="item-icon-left">
+              <p class="toRight">
+                {{car.transmission.title}}
+              </p>
+              <img src="img/transmission.png" class="icon padding non-ionic-icon" alt="Photo">
+            </ion-item>
+            <ion-item ng-show="car.eco != null" class="item-icon-left">
+              <p class="toRight">
+                {{car.eco.title}}
+              </p>
+              <i class="icon {{car.eco.icon}}"></i>
+            </ion-item>
+            <ion-item class="item-icon-left">
+              <p class="toRight">
+                {{car.maxSpeed.title}}
+              </p>
+              <i class="icon {{car.maxSpeed.icon}}"></i>
+            </ion-item>
+            <ion-item class="item-icon-left">
+              <p class="toRight">
+                {{car.consumes.title}}
+              </p>
+              <i class="icon {{car.consumes.icon}}"></i>
+            </ion-item>
+            <ion-item class="item-icon-left">
+              <p class="toRight">
+                {{car.wheelSystem.title}}
+              </p>
+              <img src="img/wheelSystem.png" class="icon non-ionic-icon" alt="Photo">
+            </ion-item>
+            <ion-item class="item-icon-left">
+              <p class="toRight">
+                {{car.weight.title}} T
+              </p>
+              <img src="img/weigthIcon.png" class="icon non-ionic-icon" alt="Photo">
+            </ion-item>
+          </ion-list>
+        </ion-content>
+      </ion-side-menu-content>
+
+      <my-side-menu></my-side-menu>
+    </ion-side-menus>
+  </ion-pane>
+</ion-view>

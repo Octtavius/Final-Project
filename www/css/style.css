@@ -42,3 +42,15 @@ ion-content{
 .assistanceBtn{
   margin-top: 20% !important;
 }
+
+
+.myBackBtn{
+  position: absolute;
+  font-size: 45px;
+  top: 5px;
+  left: 5px;
+}
+
+.carInfo #carDesc .carImg{
+  width: 100%;
+}

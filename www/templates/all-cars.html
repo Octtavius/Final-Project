@@ -6,10 +6,10 @@
           <h2>{{title}}</h2>
           <div  ng-repeat="car in allCars">
             <div class="row" ng-if="$even">
-              <a href="#/tab/home/{{car.car_id}}" class="col car-item">
+              <a href="#/tab/info/{{car.car_id}}" class="col car-item">
                 <img src="{{allCars[$index].imgUrl}}" class="icon" alt="Photo">
               </a>
-              <a href="#/tab/home/{{allCars[$index + 1].car_id}}" class="col car-item">
+              <a href="#/tab/info/{{allCars[$index + 1].car_id}}" class="col car-item">
                 <img src="{{allCars[$index + 1].imgUrl}}" class="icon" alt="Photo">
               </a>
             </div>

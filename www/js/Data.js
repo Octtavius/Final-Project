@@ -72,10 +72,6 @@
           title: "Manual",
           icon: "ion-"
         },
-        // eco: {
-        //   title: "Eco",
-        //   icon: "ion-leaf"
-        // },
         maxSpeed: {
           title: "316",
           icon: "ion-ios-speedometer"
@@ -93,7 +89,7 @@
         }
       },
       {
-        car_id: "113",
+        car_id: "225",
         imgUrl: "img/vw_scirocco.png",
         brand: {
           title: "Volkswagen",

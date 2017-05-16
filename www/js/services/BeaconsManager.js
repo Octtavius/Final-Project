@@ -110,6 +110,7 @@
                 //   // console.log(Object.keys(from)[2]);
                 //
                 // });
+
                 if(($state.is('tabs.home'))) {
                   $window.location.href = "#/tab/home/" + $rootScope.nearestBeacon.minor;
                 }
@@ -146,9 +147,10 @@
               console.log("inragne is true");
               $rootScope.inRange = false;
               $rootScope.nearestBeacon = null;
-              $compile($('#carDesc'))($rootScope)
+              $compile($('#carDesc'))($rootScope);
             }
           }
+          $rootScope.$apply();
         });
 
         //create range of beacons to look for

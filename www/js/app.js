@@ -3,7 +3,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
     $ionicConfigProvider.tabs.position('bottom'); // other values: top
 
   }])
-  .run(function($ionicPlatform, BeaconsManager, $rootScope, AnalyticsServices, recordService) {
+  .run(function($ionicPlatform, BeaconsManager, $rootScope, AnalyticsServices, recordService, $state, $window, $location) {
     $ionicPlatform.ready(function() {
       if(window.cordova && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -13,10 +13,26 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
       }
     });
 
+    $rootScope.$on('$stateChangeSuccess',
+      function(event, toState, toParams, fromState, fromParams){
+
+        if((toState.name === ('tabs.home'))) {
+          if($rootScope.nearestBeacon != null) {
+            //check if page is not updated based on beacons
+            // console.log($location.path());
+            // console.log($location.path() === (+"/tab/home/" + $rootScope.nearestBeacon.minor));
+            if (($location.path()).indexOf($rootScope.nearestBeacon.minor) === -1) {
+
+              $window.location.href = "#/tab/home/" + $rootScope.nearestBeacon.minor;
+            }
+          }
+        }
+      })
+
     recordService.initDB();
 
-    BeaconsManager.range();
 
+    // BeaconsManager.range();
       $rootScope.$watch('nearestBeacon', function (nearestBeacon, previousBeacon) {
         if(nearestBeacon != undefined && previousBeacon === undefined) {
           // $scope.beaconType = 1;
@@ -47,6 +63,15 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
           'home-tab': {
             templateUrl: "templates/first.html",
             controller: "firstCtrl"
+          }
+        }
+      })
+      .state('tabs.info', {
+        url: "/info/:id",
+        views: {
+          'info-tab': {
+            templateUrl: "templates/car-info.html",
+            controller: "carInfoCtrl"
           }
         }
       })
@@ -107,12 +132,12 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
   .controller("TabsCtrl", function ($scope, $ionicSideMenuDelegate, cam) {
     $scope.title = "Interactive Cars"
     $scope.toggleRight = function () {
-      console.log("-=====");
       $ionicSideMenuDelegate.toggleRight();
     };
 
     $scope.takePhoto = function () {
-      console.log("take photo");
+      $ionicSideMenuDelegate.toggleRight();
+
       cam.takePhoto()
     }
   })
@@ -142,8 +167,6 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
       $scope.button.disabled = true;
       $scope.button.title = "Assistance request sent";
     };
-
-
 
     $scope.theSocket = null;
 
@@ -177,7 +200,8 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
     }
 
     var setListeners = function () {
-      $scope.theSocket = socketFactory({ioSocket: io.connect('http://192.168.1.8:3000')});
+      $scope.theSocket = socketFactory({ioSocket: io.connect('https://final-server-project-octtavius7.c9users.io')});
+      // $scope.theSocket = socketFactory({ioSocket: io.connect('http://192.168.1.8:3000')});
       //staff cancel the request
       $scope.theSocket.on("staff:reply", function () {
         $interval.cancel(vibrationInterval);
@@ -236,9 +260,8 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
             // });
         }
         else{
-          console.log("END");
-
           if($rootScope.nearestBeacon != null) {
+            console.log("THERE IS SOME NEAREST");
             if(!listenersSet) {
               console.log("setListeneres...");
               setListeners();
@@ -253,6 +276,10 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
           }
           else {
 
+            $ionicPopup.alert({
+              title: "Out of Range",
+              content: "Make sure you are in front of a car before requesting assistance."
+            })
           }
         }
       }
@@ -268,7 +295,16 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
     $scope.title = "All Cars";
     $scope.allCars = Data.getAllCars()
   })
-  .controller('firstCtrl', function($scope, Data, $state, cam, $rootScope) {
+  .controller("carInfoCtrl", function ($scope, Data, $state, $ionicHistory) {
+    $scope.title = "NEW PAGE";
+    var carId = $state.params.id;
+    $scope.car = Data.carById(carId)
+
+    $scope.myGoBack = function () {
+      $ionicHistory.goBack();
+    }
+  })
+  .controller('firstCtrl', function($scope, Data, $state, cam, $ionicSideMenuDelegate) {
 
 
     var carId = $state.params.id;
@@ -280,7 +316,8 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
     $scope.title = "Interactive Beacon App";
 
     $scope.takePhoto = function () {
-      console.log("take photo");
+
+      $ionicSideMenuDelegate.toggleRight();
       cam.takePhoto()
     }
     // $scope.toggleRight = function () {
@@ -318,6 +355,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
       templateUrl: "templates/side-menu.html"
     }
   })
+
   .factory("cam", function ($cordovaCamera, StorageService) {
   var allPic = [];
   var tp = function() {
