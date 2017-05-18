@@ -46,7 +46,7 @@
         }
       },
       {
-        car_id: "112",
+        car_id: "214",
         imgUrl: "img/Mercedes-AMG-GT-C-Roadster.png",
         brand: {
           title: "Mercedes-Benz",
@@ -180,8 +180,9 @@
           title: 16500
         }
       },
+
       {
-        car_id: "112",
+        car_id: "238",
         imgUrl: "img/bmw-i3.png",
         brand: {
           title: "BMW",

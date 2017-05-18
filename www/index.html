@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html  ng-app="starter">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
@@ -35,30 +35,32 @@
 
     <script src="lib/jquery/dist/jquery.min.js"></script>
     <script src="lib/pouchdb/dist/pouchdb.min.js"></script>
-
+    <script src="lib/socket.io-client/dist/socket.io.js"></script>
+    <script src="lib/angular-socket-io/socket.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <!-- your app's js -->
     <script src="js/app.js"></script>
 
     <script src="js/local-db/pouchdb.js"></script>
     <script src="lib/moment/min/moment.min.js"></script>
     <script src="lib/angular-moment/angular-moment.min.js"></script>
+    <script src="js/services.js"></script>
 
-    <script src="lib/sio-client/socket.io.js"></script>
+    <!--<script src="lib/sio-client/socket.io.js"></script>-->
 
-    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
 
-    <script src="lib/angular-socket-io/socket.js"></script>
+
 
     <script src="js/services/BeaconsManager.js"></script>
     <script src="js/services/AnalyticServices.js"></script>
 
-    <script src="js/services/SocketService.js"></script>
+    <!--<script src="js/services/SocketService.js"></script>-->
 
     <script src="js/Data.js"></script>
     <script src="js/controllers.js"></script>
-    <script src="js/services.js"></script>
+    <script src="js/controllers/assistance.js"></script>
   </head>
-  <body ng-app="starter">
+  <body>
   <!--<ion-nav-bar>-->
     <!--&lt;!&ndash;<ion-nav-back-button class="button-clear">&ndash;&gt;-->
       <!--&lt;!&ndash;<i class="ion-arrow-left-c"></i> Back&ndash;&gt;-->

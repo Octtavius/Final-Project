@@ -27,12 +27,12 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
             }
           }
         }
-      })
+      });
 
     recordService.initDB();
 
-
-    // BeaconsManager.range();
+    BeaconsManager.range();
+    // BeaconsManager.tempEmulate();
       $rootScope.$watch('nearestBeacon', function (nearestBeacon, previousBeacon) {
         if(nearestBeacon != undefined && previousBeacon === undefined) {
           // $scope.beaconType = 1;
@@ -154,142 +154,6 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
     // console.log($scope.allpic.length);
     $scope.things = StorageService.getAll();
     console.log($scope.things.length);
-  })
-  .controller("AssistanceCtrl", function ($scope, $ionicPlatform, $ionicPopup, $rootScope, socketFactory, $cordovaVibration, $interval, Data) {
-    $scope.$on("$ionicView.afterEnter", function () {
-      $('#car-desc-tab').attr("disabled", true);
-      if($scope.nearestBeacon != null) {
-        $scope.car = Data.carById($rootScope.nearestBeacon.minor)
-      }
-    })
-    var onRequestSent = function () {
-      $scope.button.request.sent = true;
-      $scope.button.disabled = true;
-      $scope.button.title = "Assistance request sent";
-    };
-
-    $scope.theSocket = null;
-
-    $scope.button = {
-      title: "Get assistance",
-      request: {
-        sent: false,
-        received: false
-      },
-      disabled: false
-    };
-    $scope.metAssistanceBtn = {
-      title: "I met the assistant",
-      display: false
-    };
-
-    var listenersSet = false;
-
-    var vibrationInterval = null;
-
-    function updateUIonCancel() {
-      if(vibrationInterval !== null) {
-        $interval.cancel(vibrationInterval)
-      }
-
-      vibrationInterval = null;
-      $scope.button.request.sent = false;
-      $scope.button.title = "Assistance request sent";
-      $scope.button.disabled = false;
-      $scope.metAssistanceBtn.display = false
-    }
-
-    var setListeners = function () {
-      $scope.theSocket = socketFactory({ioSocket: io.connect('https://final-server-project-octtavius7.c9users.io')});
-      // $scope.theSocket = socketFactory({ioSocket: io.connect('http://192.168.1.8:3000')});
-      //staff cancel the request
-      $scope.theSocket.on("staff:reply", function () {
-        $interval.cancel(vibrationInterval);
-        vibrationInterval = null;
-        hideMetAssistantBtn();
-        $scope.button.request.sent = false;
-      });
-
-      $scope.theSocket.on("staff:arrived", function () {
-        //change text back
-        $scope.button.title =  "Get assistance";
-        $scope.button.disabled = false;
-        $scope.metAssistanceBtn.display = true;
-
-        if(vibrationInterval === null) {
-          vibrationInterval = $interval(function () {
-            $cordovaVibration.vibrate(300)
-          }, 800)
-        }
-        // Vibrate 100ms
-      });
-      $scope.theSocket.on("staff:accepted:request", function () {
-        $scope.button.title = "Assistance is on its way"
-      });
-      $scope.theSocket.on("staff:canceled:request", function () {
-        updateUIonCancel();
-      })
-    };
-
-    var hideMetAssistantBtn = function () {
-      $scope.metAssistanceBtn.display = false;
-    };
-
-    $scope.stopVibration = function () {
-      $interval.cancel(vibrationInterval);
-      vibrationInterval = null;
-      hideMetAssistantBtn();
-      $scope.button.request.sent = false;
-      $scope.theSocket.emit('met:assistant');
-      console.log("assitant met");
-    };
-
-    $scope.title = "Assistance page";
-    $scope.requestAssistance = function () {
-
-      if(window.Connection) {
-        if(navigator.connection.type == Connection.NONE) {
-          $ionicPopup.alert({
-            title: "Internet Disconnected",
-            content: "The internet is disconnected on your device."
-          })
-            // .then(function(result) {
-            //   if(!result) {
-            //     $ionicPlatform.exitApp();
-            //   }
-            // });
-        }
-        else{
-          if($rootScope.nearestBeacon != null) {
-            console.log("THERE IS SOME NEAREST");
-            if(!listenersSet) {
-              console.log("setListeneres...");
-              setListeners();
-              listenersSet = true;
-            }
-            var msg = {
-              carId: $scope.car.car_id,
-              carName: $scope.car.brand.title + " " + $scope.car.model.title
-            };
-            $scope.theSocket.emit('send:request', msg);
-            onRequestSent();
-          }
-          else {
-
-            $ionicPopup.alert({
-              title: "Out of Range",
-              content: "Make sure you are in front of a car before requesting assistance."
-            })
-          }
-        }
-      }
-
-
-    };
-    $scope.cancelClientRequest = function () {
-      $scope.theSocket.emit('client:cancel:request');
-      updateUIonCancel();
-    }
   })
   .controller("AllCarsCtrl", function ($scope, Data) {
     $scope.title = "All Cars";
