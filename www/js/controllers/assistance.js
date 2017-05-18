@@ -1,12 +1,40 @@
 angular.module('starter')
   .controller("AssistanceCtrl", function ($scope, $ionicPlatform, $ionicPopup, $rootScope, socketFactory, $cordovaVibration, $interval, Data) {
+
+    var findCarInterval = null;
+
+    var setClosestCar = function (beaconId) {
+      $scope.car = Data.carById(beaconId);
+    };
+
     $scope.$on("$ionicView.afterEnter", function () {
       $('#car-desc-tab').attr("disabled", true);
       if($scope.nearestBeacon != null) {
-        $scope.car = Data.carById($rootScope.nearestBeacon.minor)
+        setClosestCar($rootScope.nearestBeacon.minor);
+      } else {
+        if(findCarInterval === null) {
+          findCarInterval = $interval(function () {
+            if($rootScope.nearestBeacon !== null && $rootScope.nearestBeacon !== undefined) {
+              console.log("there is a car");
+              setClosestCar($rootScope.nearestBeacon.minor);
+              $interval.cancel(findCarInterval);
+            }
+          }, 500)
+        }
       }
     });
 
+    $scope.$on("$ionicView.afterEnter", function () {
+      if(findCarInterval === null) {
+        $interval.cancel(findCarInterval);
+      }
+    });
+
+    var disconnectClient = function (clientSocket) {
+      listenersSet = false;
+      updateUIonCancel();
+      clientSocket.disconnect()
+    }
 
     //when request was made, this function will set the parameters to change button into disabled and will show up another red button
     var onRequestSent = function () {
@@ -14,7 +42,6 @@ angular.module('starter')
       $scope.button.disabled = true;
       $scope.button.title = "Assistance request sent";
     };
-
 
     $scope.theSocket = null;
 
@@ -31,7 +58,6 @@ angular.module('starter')
       title: "I met the assistant",
       display: false
     };
-
 
     var listenersSet = false;
 
@@ -51,15 +77,13 @@ angular.module('starter')
     }
 
     var setListeners = function () {
-      console.log("set listeners");
       // $scope.theSocket = socketFactory({ioSocket: io.connect('https://final-server-project-octtavius7.c9users.io')});
       $scope.theSocket = socketFactory({ioSocket: io.connect('http://192.168.1.8:3000')});
+
       //staff cancel the request
       $scope.theSocket.on("staff:reply", function () {
-        $interval.cancel(vibrationInterval);
-        vibrationInterval = null;
-        hideMetAssistantBtn();
-        $scope.button.request.sent = false;
+        updateUIonCancel();
+        disconnectClient($scope.theSocket)
       });
 
 
@@ -77,6 +101,7 @@ angular.module('starter')
         // Vibrate 100ms
       });
       $scope.theSocket.on("staff:accepted:request", function () {
+        console.log("staff accepted request")
         $scope.button.title = "Assistance is on its way"
       });
 
@@ -86,20 +111,19 @@ angular.module('starter')
 
       $scope.theSocket.on("staff:canceled:request", function () {
         updateUIonCancel();
+        disconnectClient($scope.theSocket)
       })
     };
-
-    var hideMetAssistantBtn = function () {
-      $scope.metAssistanceBtn.display = false;
-    };
+    //
+    // //set button metAssistance display to false, this way the UI will update
+    // var hideMetAssistantBtn = function () {
+    //   $scope.metAssistanceBtn.display = false;
+    // };
 
     $scope.stopVibration = function () {
-      $interval.cancel(vibrationInterval);
-      vibrationInterval = null;
-      hideMetAssistantBtn();
-      $scope.button.request.sent = false;
+      //i use updateon cancel function as it does same things as it should do on assistance met
+      updateUIonCancel();
       $scope.theSocket.emit('met:assistant');
-      console.log("assitant met");
     };
 
     $scope.title = "Assistance page";
@@ -144,9 +168,6 @@ angular.module('starter')
 
     $scope.cancelClientRequest = function () {
       $scope.theSocket.emit('client:cancel:request');
-      $scope.theSocket.disconnect();
-      // $scope.theSocket = null;
-      listenersSet = false;
-      updateUIonCancel();
+      disconnectClient($scope.theSocket)
     }
-  })
+  });
