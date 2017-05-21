@@ -1,0 +1,16 @@
+
+.myBackBtn{
+  position: absolute;
+  font-size: 30px;
+  top: 0px;
+  left: 0px;
+  padding: 12px;
+}
+
+.bookmarkIcon{
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  font-size: 30px;
+  padding: 15px;
+}

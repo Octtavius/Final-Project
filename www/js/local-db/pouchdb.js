@@ -86,33 +86,8 @@ function recordService($q) {
         }).on('error', function (err) {
         // error while replicating
         console.log("error syunc......\n", err);
-        // console.log(err.status);
-        // console.log(err.name);
-        // console.log(err.message);
-        // console.log(err.result);
-        // console.log('.......error.result..........');
-        // // console.log(Object.keys(err.result)[0]);
-        // // console.log(Object.keys(err.result)[1]);
-        // // console.log(Object.keys(err.result)[2]);
-        // // console.log(Object.keys(err.result)[3]);
-        // // console.log(Object.keys(err.result)[4]);
-        // // console.log(Object.keys(err.result)[5]);
-        // // console.log(Object.keys(err.result)[6]);
-        // // console.log(Object.keys(err.result)[7]);
-        // // console.log(Object.keys(err.result)[8]);
-        // // console.log(Object.keys(err.result)[9]);
-        // console.log(err.result.ok);
-        // console.log(err.result.start_time);
-        // console.log(err.result.docs_written);
-        // console.log(err.result.doc_write_failures);
-        // console.log(err.result.errors);
-        // console.log(err.result.status);
-        // console.log(err.result.end_time);
-        // console.log(err.result.last_seq);
-        // console.log("end err sync==================");
       })
-    }
-
+    };
 
   return {
     initDB: initDB,

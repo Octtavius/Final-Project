@@ -16,8 +16,11 @@
             <title>{{title}}</title>
           <ion-list id="carDesc">
             <ion-item class="item-image">
-              <i class="icon ion-arrow-left-c myBackBtn" ng-click="myGoBack()"></i>
               <img src="{{car.imgUrl}}" class="icon carImg" alt="Photo">
+              <i class="icon ion-arrow-left-c myBackBtn" ng-click="myGoBack()"></i>
+
+              <i class="icon ion-bookmark bookmarkIcon" ng-click="saveBookmark()"></i>
+
             </ion-item>
 
             <ion-item class="item-icon-left">
