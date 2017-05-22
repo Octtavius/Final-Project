@@ -2,6 +2,76 @@ angular.module('starter')
   .controller("carInfoCtrl", function ($scope, Data, $state, $ionicHistory, authService, userPouchDb, $ionicPopup) {
     $scope.title = "NEW PAGE !";
     var carId = $state.params.id;
+
+    var signUp = function () {
+      // SIGN AUP
+      var confirmPopup = $ionicPopup.confirm({
+        title: "Out of Range",
+        templateUrl: "authentication/templates/signup.html",
+        okText: "Sign Up",
+        scope: $scope
+      });
+
+      confirmPopup.then(function(res) {
+        if(res) {
+          console.log('Sure!');
+          //if email is email type and password has at least 3 chars
+          if($scope.data.email !== undefined && $scope.data.password.length >= 3) {
+            if (!authService.isInitiated()) {
+              console.log("db is not initiated. we will do that");
+              authService.initDB();
+            }
+            authService.signUp($scope.data);
+          }
+
+        } else {
+          console.log('Not sure!');
+        }
+      });
+    }
+
+    var logIn = function () {
+      // Login
+      var confirmPopup = $ionicPopup.confirm({
+        title: "Log In",
+        templateUrl: "authentication/templates/login.html",
+        okText: "Log in",
+        scope: $scope
+      });
+
+      confirmPopup.then(function(res) {
+        if(res) {
+          //if email is email type and password has at least 3 chars
+          if($scope.data.email !== undefined && $scope.data.password.length >= 3) {
+            if (!authService.isInitiated()) {
+              console.log("db is not initiated. we will do that");
+              authService.initDB();
+            }
+            $scope.user = authService.signIn($scope.data);
+
+            if($scope.user === "unauthorized") {
+            //  ????????????????????????????????????????????????
+            //  ????????????????????????????????????????????????
+            //  ????????????????????????????????????????????????
+            //  ????????????????????????????????????????????????
+            //  ????????????????????????????????????????????????
+            //  ????????????????????????????????????????????????
+            //  ????????????????????????????????????????????????
+            //  ????????????????????????????????????????????????
+            //  ????????????????????????????????????????????????
+            //  ????????????????????????????????????????????????
+            //  ????????????????????????????????????????????????
+            }
+          }
+          else {
+            console.log("somehting else");
+          }
+        } else {
+          console.log('Not sure!');
+        }
+      });
+    }
+
     $scope.car = Data.carById(carId)
 
     $scope.data = {};
@@ -28,31 +98,7 @@ angular.module('starter')
             //if nobody is logged in/if suerCtx.name is false, show a form popup
             if(!response.userCtx.name) {
               // console.log("nobody is logged in: car info");
-
-              // Login
-              var confirmPopup = $ionicPopup.confirm({
-                title: "Log In",
-                templateUrl: "authentication/templates/login.html",
-                okText: "Log in",
-                scope: $scope
-              });
-
-              confirmPopup.then(function(res) {
-                if(res) {
-                  console.log('Sure!');
-                  //if email is email type and password has at least 3 chars
-                  if($scope.data.email !== undefined && $scope.data.password.length >= 3) {
-                    console.log("etaill");
-                    if (!authService.isInitiated()) {
-                      console.log("db is not initiated. we will do that");
-                      authService.initDB();
-                    }
-                    $scope.user = authService.signIn($scope.data);
-                  }
-                } else {
-                  console.log('Not sure!');
-                }
-              });
+              logIn();
             }
             else if(response.userCtx.name){
               $scope.user = {email: response.userCtx.name};
@@ -63,31 +109,6 @@ angular.module('starter')
               console.log("error or user found");
             }
           });
-
-          // SIGN AUP
-          // var confirmPopup = $ionicPopup.confirm({
-          //   title: "Out of Range",
-          //   templateUrl: "authentication/templates/signup.html",
-          //   okText: "Sign Up",
-          //   scope: $scope
-          // });
-          //
-          // confirmPopup.then(function(res) {
-          //   if(res) {
-          //     console.log('Sure!');
-          //     //if email is email type and password has at least 3 chars
-          //     if($scope.data.email !== undefined && $scope.data.password.length >= 3) {
-          //       if (!authService.isInitiated()) {
-          //         console.log("db is not initiated. we will do that");
-          //         authService.initDB();
-          //       }
-          //       authService.signUp($scope.data);
-          //     }
-          //
-          //   } else {
-          //     console.log('Not sure!');
-          //   }
-          // });
         }
       }
       // console.log("save car");

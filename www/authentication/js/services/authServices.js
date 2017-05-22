@@ -33,7 +33,7 @@ function authService($q) {
       if (err) {
         if (err.name === 'unauthorized') {
           // name or password incorrect
-          console.log("name or password is incorrect");
+          console.log("name or password is incorrect: " + err.name);
           return err.name;
         } else {
           // should be other error
@@ -82,19 +82,24 @@ function authService($q) {
   };
 
   var logout = function (callback) {
-    remoteDB.logout(function (err, response) {
-      if (err) {
-        // network error
-        console.log("some.. error");
-        console.log(typeof err);
-        callback(err);
-      }
-      else if(response){
 
-        callback(response);
+    getSession(function (resp) {
+      if(resp.userCtx.name){
+        remoteDB.logout(function (err, response) {
+          if (err) {
+            // network error
+            // console.log("some.. error");
+            // console.log(typeof err);
+            callback(err);
+          }
+          else if(response){
+
+            callback(response);
+          }
+        })
       }
-    })
-  }
+    });
+  };
 
   function initDB() {
     // Creates the database or opens if it already exists
