@@ -94,7 +94,7 @@
               $rootScope.nearestBeacon = data.beacons[i];
             }
             else {
-              console.log($rootScope.nearestBeacon.minor);
+              // console.log($rootScope.nearestBeacon.minor);
             }
             updateNearestBeacon(data.beacons, $rootScope.nearestBeacon, function (result) {
               $rootScope.nearestBeacon = result;

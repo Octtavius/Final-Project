@@ -1,4 +1,4 @@
-angular.module('starter').factory('favListServices', ['$q', recordServices]);
+angular.module('starter').factory('userPouchDb', ['$q', favListServices]);
 
 function favListServices($q) {
   var _db;
@@ -6,6 +6,28 @@ function favListServices($q) {
   // We'll need this later.
   var _cars;
 
+  // function doSignUp(user) {
+  //   remoteDB.signup(user.email, user.password, function (err, response) {
+  //     if (err) {
+  //       // console.log("some error")
+  //       if (err.name === 'conflict') {
+  //         console.log("error name: ");
+  //         console.log(err.name);
+  //         // "batman" already exists, choose another username
+  //       } else if (err.name === 'forbidden') {
+  //         // invalid username
+  //         console.log("name is forbidden");
+  //       } else {
+  //         console.log("http error: ");
+  //       }
+  //     }
+  //     else {
+  //       console.log("signed up. send back some response...")
+  //     }
+  //   });
+  //
+  //   sync();
+  // }
 
   function saveCar(car) {
     return $q.when(_db.post(car));
@@ -15,7 +37,7 @@ function favListServices($q) {
     return $q.when(_db.remove(car));
   };
 
-  function getFavList() {
+  function getAllCars() {
     if (!_cars) {
       return $q.when(_db.allDocs({ include_docs: true}))
         .then(function(docs) {
@@ -70,33 +92,29 @@ function favListServices($q) {
 
   function initDB() {
     // Creates the database or opens if it already exists
-    _db = new PouchDB('favouriteList');
-    console.log(_db.adapter);
-    remoteDB = new PouchDB('https://couchdb-77cd9f.smileupps.com/favouriteList');
+    remoteDB =new PouchDB('https://couchdb-77cd9f.smileupps.com/users', {skipSetup: true});
+    console.log(remoteDB.adapter);
+    _db =  new PouchDB('users');
     // remoteDB = new PouchDB('http://192.168.1.8:5984/records');
   };
 
   var sync = function () {
-    _db
-      .replicate
-      .to(remoteDB)
-      .on('complete', function () {
-        console.log("syncing......");
-        // local changes replicated to remote
-      }).on('error', function (err) {
-      // error while replicating
-      console.log("error syunc......\n", err);
-    })
+    _db.sync(remoteDB, {live: true, retry: true}).on('error', console.log.bind(console));
+  };
+
+  var isInit = function () {
+    return (remoteDB !== undefined && remoteDB.name === "https://couchdb-77cd9f.smileupps.com/users")
   };
 
   return {
     initDB: initDB,
-
     // We'll add these later.
-    getAllRecords: getAllRecords,
-    addRecord: addRecord,
-    deleteRecord: deleteRecord,
-    syncRemoteDb: sync
+    getAllCars: getAllCars,
+    saveCar: saveCar,
+    deleteCar: deleteCar,
+    syncRemoteDb: sync,
+    // signUp: doSignUp,
+    isInitiated: isInit
   };
 }
 

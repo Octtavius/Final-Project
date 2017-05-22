@@ -78,7 +78,8 @@ angular.module('starter')
 
     var setListeners = function () {
       // $scope.theSocket = socketFactory({ioSocket: io.connect('https://final-server-project-octtavius7.c9users.io')});
-      $scope.theSocket = socketFactory({ioSocket: io.connect('http://192.168.1.8:3000')});
+      // $scope.theSocket = socketFactory({ioSocket: io.connect('http://192.168.1.8:3000')});
+      $scope.theSocket = socketFactory({ioSocket: io.connect('http://10.182.95.233:3000')});
 
       //staff cancel the request
       $scope.theSocket.on("staff:reply", function () {
