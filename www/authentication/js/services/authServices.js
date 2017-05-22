@@ -5,6 +5,11 @@ function authService($q) {
   var remoteDB;
 
   var doSignUp = function(user) {
+
+    //check if database is initialized
+    if (!isInit()) {
+      initDB();
+    }
     remoteDB.signup(user.email, user.password, function (err, response) {
       if (err) {
         // console.log("some error")
@@ -27,21 +32,24 @@ function authService($q) {
     sync();
   }
 
-  var doSignIn = function(user) {
+  var doSignIn = function(user, callback) {
     console.log("singing in")
     remoteDB.login(user.email, user.password, function (err, response) {
       if (err) {
         if (err.name === 'unauthorized') {
           // name or password incorrect
           console.log("name or password is incorrect: " + err.name);
-          return err.name;
+          callback(err.name);
         } else {
           // should be other error
-          return err;
+          callback(err);
         }
       }
-      sync();
-      return response;
+      else {
+
+        sync();
+        callback(response);
+      }
     });
   };
 
