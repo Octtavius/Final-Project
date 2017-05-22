@@ -1,0 +1,13 @@
+<div class="list list-inset">
+  <label class="item item-input">
+    <input type="email" placeholder="Email" ng-model="data.email" required>
+  </label>
+  <label class="item item-input">
+    <input type="password" placeholder="Password" ng-model="data.password">
+  </label>
+</div>
+<p style="color: red" ng-show="user === 'unauthorized'">Email or Password is incorrect!</p>
+<br>
+<a ng-click="redirectToSignUp()">Register</a>
+<br>
+<!--<button class="button button-block button-calm" ng-click="login()">Login</button>-->

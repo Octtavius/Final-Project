@@ -76,6 +76,11 @@ function recordService($q) {
       // remoteDB = new PouchDB('http://192.168.1.8:5984/records');
     };
 
+    var isInit = function () {
+      console.log(_db.name);
+      return (remoteDB !== undefined && remoteDB.name === "https://couchdb-77cd9f.smileupps.com/records")
+    };
+
     var sync = function () {
       _db
         .replicate
@@ -91,7 +96,7 @@ function recordService($q) {
 
   return {
     initDB: initDB,
-
+    isInit: isInit,
     // We'll add these later.
     getAllRecords: getAllRecords,
     addRecord: addRecord,
