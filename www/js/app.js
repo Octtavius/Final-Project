@@ -130,7 +130,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
       });
     $urlRouterProvider.otherwise("/tab/home/111");
   })
-  .controller("TabsCtrl", function ($scope, $ionicSideMenuDelegate, cam) {
+  .controller("TabsCtrl", function ($scope, $ionicSideMenuDelegate, cam, authService) {
     $scope.title = "Interactive Cars"
     $scope.toggleRight = function () {
       $ionicSideMenuDelegate.toggleRight();
@@ -141,6 +141,22 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
 
       cam.takePhoto()
     }
+
+    //log out the user
+    $scope.logOut = function () {
+      authService.logOut(function (response) {
+        // if(response ){
+          if( response.ok !== undefined && response.ok){
+
+            console.log("logged out successfully", response.ok);
+          }
+        // }
+        else if(response.status !== undefined && response.status === 404){
+            console.log("logged out  failed", response.status);
+          }
+      });
+    }
+
   })
   .controller("GalleryCtrl", function ($scope, cam, StorageService) {
     $scope.title = "My Photos";

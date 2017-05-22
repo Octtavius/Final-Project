@@ -9,14 +9,14 @@ function authService($q) {
       if (err) {
         // console.log("some error")
         if (err.name === 'conflict') {
-          console.log("error name: ");
-          console.log(err.name);
+          // console.log("error name: ");
+          // console.log(err.name);
           // "batman" already exists, choose another username
         } else if (err.name === 'forbidden') {
           // invalid username
-          console.log("name is forbidden");
+          // console.log("name is forbidden");
         } else {
-          console.log("http error: ");
+          // console.log("http error: ");
         }
       }
       else {
@@ -40,16 +40,6 @@ function authService($q) {
           return err;
         }
       }
-      // console.log("=================");
-      // console.log(response);
-      // console.log(Object.keys(response)[0]);
-      // console.log(Object.keys(response)[1]);
-      // console.log(Object.keys(response)[2]);
-      // console.log("...............");
-      // console.log(response.ok);
-      // console.log(response.name);
-      // console.log(response.roles);
-      // console.log("=================");
       sync();
       return response;
     });
@@ -60,17 +50,17 @@ function authService($q) {
       initDB();
     }
 
-    _db.info().then(function (info) {
-      console.log(Object.keys(info)[0]);
-      console.log(Object.keys(info)[1]);
-      console.log(Object.keys(info)[2]);
-      console.log(Object.keys(info)[3]);
-      console.log(Object.keys(info)[4]);
-      console.log(Object.keys(info)[5]);
-
-      console.log(info.doc_count);
-      console.log(info.db_name);
-    })
+    // _db.info().then(function (info) {
+    //   console.log(Object.keys(info)[0]);
+    //   console.log(Object.keys(info)[1]);
+    //   console.log(Object.keys(info)[2]);
+    //   console.log(Object.keys(info)[3]);
+    //   console.log(Object.keys(info)[4]);
+    //   console.log(Object.keys(info)[5]);
+    //
+    //   console.log(info.doc_count);
+    //   console.log(info.db_name);
+    // })
 
     remoteDB.getSession(function (err, response) {
       if (err) {
@@ -91,10 +81,25 @@ function authService($q) {
     });
   };
 
+  var logout = function (callback) {
+    remoteDB.logout(function (err, response) {
+      if (err) {
+        // network error
+        console.log("some.. error");
+        console.log(typeof err);
+        callback(err);
+      }
+      else if(response){
+
+        callback(response);
+      }
+    })
+  }
+
   function initDB() {
     // Creates the database or opens if it already exists
     remoteDB =new PouchDB('https://couchdb-77cd9f.smileupps.com/users', {skipSetup: true});
-    console.log(remoteDB.adapter);
+    // console.log(remoteDB.adapter);
     _db =  new PouchDB('users');
     // remoteDB = new PouchDB('http://192.168.1.8:5984/records');
   };
@@ -113,6 +118,7 @@ function authService($q) {
     signUp: doSignUp,
     signIn: doSignIn,
     isInitiated: isInit,
-    isLoggedIn: getSession
+    isLoggedIn: getSession,
+    logOut: logout
   };
 }

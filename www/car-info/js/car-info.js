@@ -62,9 +62,7 @@ angular.module('starter')
             else {
               console.log("error or user found");
             }
-          })
-
-
+          });
 
           // SIGN AUP
           // var confirmPopup = $ionicPopup.confirm({
