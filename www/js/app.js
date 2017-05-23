@@ -76,6 +76,16 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
         }
       })
 
+      .state('tabs.fav-list', {
+        url: "/fav-list",
+        views: {
+          'fav-list-tab': {
+            templateUrl: "user/templates/fav-list.html",
+            controller: "favListCtrl"
+          }
+        }
+      })
+
       .state('tabs.home', {
         url: "/home/:id",
         views: {

@@ -1,6 +1,6 @@
-angular.module('starter').factory('userDb', ['$q', userDb]);
+angular.module('starter').factory('userDb', ['$q', '$rootScope', userDb]);
 
-function userDb($q) {
+function userDb($q, $rootScope) {
   var _db;
   var remoteDB;
   // We'll need this later.
@@ -45,29 +45,29 @@ function userDb($q) {
     return $q.when(_db.remove(car));
   };
 
-  function getAllCars() {
-    if (!_cars) {
-      return $q.when(_db.allDocs({ include_docs: true}))
+  function getAllCars(callback) {
+
+    if(!isInit()) {
+      initDB()
+    }
+
+    // _db.get()
+
+    // if (!_cars) {
+      $q.when(_db.allDocs({ include_docs: true}))
         .then(function(docs) {
 
-          // Each row has a .doc object and we just want to send an
-          // array of record objects back to the calling controller,
-          // so let's map the array to contain just the .doc objects.
-          _cars = docs.rows.map(function(row) {
-            // Dates are not automatically converted from a string.
-            row.doc.Date = new Date(row.doc.Date);
-            return row.doc;
+          // console.log(Object.keys(docs)[0]);
+          // console.log(Object.keys(docs)[1]);
+          // console.log(Object.keys(docs)[2]);
+
+          var temp = docs.rows.map(function (row) {
+            //row.doc.favList is an object. and param at 0 is the array
+            return row.doc.favList
           });
 
-          // Listen for changes on the database.
-          _db.changes({ live: true, since: 'now', include_docs: true})
-            .on('change', onDatabaseChange);
-
-          return _cars_cars});
-    } else {
-      // Return cached data as a promise
-      return $q.when(_cars);
-    }
+          callback(temp[0])
+    })
   };
 
   function onDatabaseChange(change) {

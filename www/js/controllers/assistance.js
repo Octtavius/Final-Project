@@ -24,11 +24,11 @@ angular.module('starter')
       }
     });
 
-    $scope.$on("$ionicView.afterEnter", function () {
-      if(findCarInterval === null) {
-        $interval.cancel(findCarInterval);
-      }
-    });
+    // $scope.$on("$ionicView.afterEnter", function () {
+    //   if(findCarInterval === null) {
+    //     $interval.cancel(findCarInterval);
+    //   }
+    // });
 
     var disconnectClient = function (clientSocket) {
       listenersSet = false;
