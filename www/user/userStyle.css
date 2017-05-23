@@ -1,0 +1,10 @@
+.favCarImg, .favCarText{
+  float: left;
+}
+.favCarText{
+  width: 80%;
+}
+
+.favCarImg {
+  width: 15%;
+}

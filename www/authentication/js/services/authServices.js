@@ -1,6 +1,6 @@
-angular.module('starter').factory('authService', ['$q', authService]);
+angular.module('starter').factory('authService', ['$q', "$rootScope", authService]);
 
-function authService($q) {
+function authService($q, $rootScope) {
   var _db;
   var remoteDB;
 
@@ -44,12 +44,16 @@ function authService($q) {
           // should be other error
           callback(err);
         }
+        $rootScope.loggedIn = false;
+
       }
       else {
-
         sync();
+        $rootScope.loggedIn = true;
         callback(response);
       }
+
+      $rootScope.$apply()
     });
   };
 
@@ -105,6 +109,9 @@ function authService($q) {
             callback(response);
           }
         })
+
+        $rootScope.loggedIn = false;
+        $rootScope.$apply()
       }
     });
   };

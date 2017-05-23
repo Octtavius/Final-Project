@@ -78,8 +78,8 @@ angular.module('starter')
 
     var setListeners = function () {
       // $scope.theSocket = socketFactory({ioSocket: io.connect('https://final-server-project-octtavius7.c9users.io')});
-      // $scope.theSocket = socketFactory({ioSocket: io.connect('http://192.168.1.8:3000')});
-      $scope.theSocket = socketFactory({ioSocket: io.connect('http://10.182.95.233:3000')});
+      $scope.theSocket = socketFactory({ioSocket: io.connect('http://192.168.1.8:3000')});
+      // $scope.theSocket = socketFactory({ioSocket: io.connect('http://10.182.95.233:3000')});
 
       //staff cancel the request
       $scope.theSocket.on("staff:reply", function () {
@@ -89,18 +89,26 @@ angular.module('starter')
 
 
       $scope.theSocket.on("staff:arrived", function () {
-        //change text back
-        $scope.button.title =  "Get assistance";
-        $scope.button.disabled = false;
-        $scope.metAssistanceBtn.display = true;
+        if(!$rootScope.appPaused){
+          //change text back
+          $scope.button.title =  "Get assistance";
+          $scope.button.disabled = false;
+          $scope.metAssistanceBtn.display = true;
 
-        if(vibrationInterval === null) {
-          vibrationInterval = $interval(function () {
-            $cordovaVibration.vibrate(300)
-          }, 800)
+          if(vibrationInterval === null) {
+            vibrationInterval = $interval(function () {
+              $cordovaVibration.vibrate(300)
+            }, 800)
+          }
+        }
+        else {
+          $scope.theSocket.emit("notification:from:client:app:paused");
+          onRequestSent()
+          console.log("app is paused");
         }
         // Vibrate 100ms
       });
+
       $scope.theSocket.on("staff:accepted:request", function () {
         console.log("staff accepted request")
         $scope.button.title = "Assistance is on its way"

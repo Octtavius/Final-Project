@@ -3,14 +3,34 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
     $ionicConfigProvider.tabs.position('bottom'); // other values: top
 
   }])
-  .run(function($ionicPlatform, BeaconsManager, $rootScope, AnalyticsServices, recordService, $state, $window, $location) {
+  .run(function($ionicPlatform, BeaconsManager, $rootScope, AnalyticsServices, recordService, $state, $window, $location, authService) {
     $ionicPlatform.ready(function() {
+      authService.isLoggedIn(function (response) {
+          if(response.userCtx.name){
+            $rootScope.loggedIn = true
+          }
+          else {
+            $rootScope.loggedIn = false;
+          }
+      })
+
+      $rootScope.appPaused = false;
       if(window.cordova && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       }
       if(window.StatusBar) {
         StatusBar.styleDefault();
       }
+
+      //listen to when app is minimized/working in background
+      $ionicPlatform.on("pause", function (event) {
+        $rootScope.appPaused = true;
+        //code for action on pause
+      }, false);
+      $ionicPlatform.on("resume", function (event) {
+        $rootScope.appPaused = false;
+        //code for action on resume
+      }, false);
     });
 
     $rootScope.$on('$stateChangeSuccess',
@@ -140,7 +160,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
       });
     $urlRouterProvider.otherwise("/tab/home/111");
   })
-  .controller("TabsCtrl", function ($scope, $ionicSideMenuDelegate, cam, authService, $rootScope, $ionicPopup) {
+  .controller("TabsCtrl", function ($scope, $ionicSideMenuDelegate, cam, authService, $rootScope, $ionicPopup, $state) {
     $scope.title = "Interactive Cars";
     $scope.toggleRight = function () {
       $ionicSideMenuDelegate.toggleRight();
@@ -155,6 +175,9 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
     var confirmPopup;
     //log out the user
     $scope.logIn = function () {
+      console.log("logging in");
+
+      console.log($state.current.name);
       // Login
       confirmPopup = $ionicPopup.confirm({
         title: "Log In",
@@ -165,6 +188,13 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
 
       confirmPopup.then(function(res) {
         if(res) {
+
+          $scope.data = {
+            email: angular.element('#loginInputEmail').val(),
+            password: angular.element('#loginInputPassword').val()
+          };
+
+
           //if email is email type and password has at least 3 chars
           if($scope.data.email !== undefined && $scope.data.password.length >= 3) {
             if (!authService.isInitiated()) {
@@ -217,9 +247,9 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
     $scope.things = StorageService.getAll();
     console.log($scope.things.length);
   })
-  .controller("AllCarsCtrl", function ($scope, Data) {
+  .controller("AllCarsCtrl", function ($scope, Data, authService) {
     $scope.title = "All Cars";
-    $scope.allCars = Data.getAllCars()
+    $scope.allCars = Data.getAllCars();
   })
   .controller('firstCtrl', function($scope, Data, $state, cam, $ionicSideMenuDelegate) {
 

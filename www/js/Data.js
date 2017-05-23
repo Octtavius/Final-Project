@@ -2,8 +2,9 @@
   var Data = function () {
     var cars = [
       {
-        car_id: "111",
+        car_id: "54480",
         imgUrl: "img/mercedes1.png",
+        logUrl: "mercedes-benz",
         brand: {
           title: "Mercedes-Benz",
           icon: "ion-model-s"
@@ -48,6 +49,7 @@
       {
         car_id: "214",
         imgUrl: "img/Mercedes-AMG-GT-C-Roadster.png",
+        logUrl: "mercedes-benz",
         brand: {
           title: "Mercedes-Benz",
           icon: "ion-model-s"
@@ -91,6 +93,7 @@
       {
         car_id: "225",
         imgUrl: "img/vw_scirocco.png",
+        logUrl: "vw",
         brand: {
           title: "Volkswagen",
           icon: "ion-model-s"
@@ -136,6 +139,7 @@
       {
         car_id: "217",
         imgUrl: "img/volkswagen_beetle.png",
+        logUrl: "vw",
         brand: {
           title: "Volkswagen",
           icon: "ion-model-s"
@@ -184,6 +188,7 @@
       {
         car_id: "238",
         imgUrl: "img/bmw-i3.png",
+        logUrl: "bmw",
         brand: {
           title: "BMW",
           icon: "ion-model-s"
@@ -229,6 +234,7 @@
       {
         car_id: "235",
         imgUrl: "img/A7.png",
+        logUrl: "audi",
         brand: {
           title: "Audi",
           icon: "ion-model-s"

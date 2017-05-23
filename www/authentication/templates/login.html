@@ -1,9 +1,9 @@
 <div class="list list-inset">
   <label class="item item-input">
-    <input type="email" placeholder="Email" ng-model="data.email" required>
+    <input id="loginInputEmail" type="email" placeholder="Email" ng-model="data.email" required>
   </label>
   <label class="item item-input">
-    <input type="password" placeholder="Password" ng-model="data.password">
+    <input id="loginInputPassword" type="password" placeholder="Password" ng-model="data.password">
   </label>
 </div>
 <p style="color: red" ng-show="user === 'unauthorized'">Email or Password is incorrect!</p>

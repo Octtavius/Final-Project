@@ -6,9 +6,11 @@
           <!--<title>{{title}}</title>-->
           <ion-list>
             <ion-item class="item-icon-left" ng-repeat="car in favCars">
-              <p>{{car.brand.title}}</p>
-              <p>{{car.model.title}}</p>
-
+              <div class="favCarText">
+                <p>{{car.brand.title}}</p>
+                <p>{{car.model.title}}</p>
+              </div>
+              <span><img  class="favCarImg" ng-src="img/car_logos/{{car.logUrl}}-logo.png" alt=""></span>
               <!--<p class="toRight">-->
                 <!--{{car.weight.title}} T-->
               <!--</p>-->
