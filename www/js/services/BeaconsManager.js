@@ -114,9 +114,11 @@
                 //
                 // });
 
-                if(($state.is('tabs.home'))) {
+
+                if(($state.is('tabs.home')) && !$rootScope.stateChangeAllowed) {
                   $window.location.href = "#/tab/home/" + $rootScope.nearestBeacon.minor;
                 }
+
                 prevClosest = $rootScope.nearestBeacon;
               }
             });

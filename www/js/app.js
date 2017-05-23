@@ -140,8 +140,8 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
       });
     $urlRouterProvider.otherwise("/tab/home/111");
   })
-  .controller("TabsCtrl", function ($scope, $ionicSideMenuDelegate, cam, authService) {
-    $scope.title = "Interactive Cars"
+  .controller("TabsCtrl", function ($scope, $ionicSideMenuDelegate, cam, authService, $rootScope, $ionicPopup) {
+    $scope.title = "Interactive Cars";
     $scope.toggleRight = function () {
       $ionicSideMenuDelegate.toggleRight();
     };
@@ -149,12 +149,47 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
     $scope.takePhoto = function () {
       $ionicSideMenuDelegate.toggleRight();
 
-      cam.takePhoto()
+      cam.takePhoto();
+    };
+
+    var confirmPopup;
+    //log out the user
+    $scope.logIn = function () {
+      // Login
+      confirmPopup = $ionicPopup.confirm({
+        title: "Log In",
+        templateUrl: "authentication/templates/login.html",
+        okText: "Log in",
+        scope: $scope
+      });
+
+      confirmPopup.then(function(res) {
+        if(res) {
+          //if email is email type and password has at least 3 chars
+          if($scope.data.email !== undefined && $scope.data.password.length >= 3) {
+            if (!authService.isInitiated()) {
+              console.log("db is not initiated. we will do that");
+              authService.initDB();
+            }
+            authService.signIn($scope.data, function (response) {
+              console.log("hehheee: ", response );
+              if(response === "unauthorized") {
+                $scope.logIn();
+              }
+            })
+          }
+          else {
+            console.log("somehting else");
+          }
+        }
+      });
     }
 
     //log out the user
     $scope.logOut = function () {
+      $rootScope.favCars = [];
       authService.logOut(function (response) {
+
         // if(response ){
           if( response.ok !== undefined && response.ok){
 

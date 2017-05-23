@@ -4,10 +4,11 @@ angular.module('starter')
 
     $scope.$on("$ionicView.afterEnter", function () {
       UserManager.getAllCars(function (result) {
-        $scope.favCars = result;
+        $rootScope.favCars = result;
       });
 
-    })
+    });
+
     // var carId = $state.params.id;
     //
     // var confirmPopup;

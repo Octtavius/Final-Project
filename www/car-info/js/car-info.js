@@ -54,6 +54,9 @@ angular.module('starter')
             console.log("somehting else");
           }
         }
+        else {
+          console.log("canceling");
+        }
       });
     };
 

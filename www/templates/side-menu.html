@@ -5,7 +5,8 @@
 
   <ion-list>
     <ion-item><a href="#/tab/fav-list">Favourite List</a></ion-item>
-    <ion-item ng-click="logOut()">Log Out</ion-item>
+    <ion-item ng-if="loggedIn" ng-click="logOut()">Log Out</ion-item>
+    <ion-item ng-if="!loggedIn" ng-click="logIn()">Log In</ion-item>
   </ion-list>
   <!--<ion-list>-->
     <!--<ion-item>Videos</ion-item>-->
