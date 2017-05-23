@@ -1,0 +1,33 @@
+<ion-view title="Interactive Exploring">
+  <ion-pane>
+    <ion-side-menus>
+      <ion-side-menu-content>
+        <ion-header-bar class="bar-stable">
+          <p>
+            <a class="button icon ion-person-stalker" href="#/tab/facts"></a>
+          </p>
+          <h1 class="title">{{title}}</h1>
+          <!--<button class="icon ion-navicon button button-clear"></button>-->
+          <button class="button icon button-clear ion-navicon-round"
+                  ng-click="toggleRight()"></button>
+        </ion-header-bar>
+        <ion-content>
+          <!--<title>{{title}}</title>-->
+          <ion-list>
+            <ion-item class="item-icon-left" ng-repeat="car in favCars">
+              <p>{{car.brand.title}}</p>
+              <p>{{car.model.title}}</p>
+
+              <!--<p class="toRight">-->
+                <!--{{car.weight.title}} T-->
+              <!--</p>-->
+              <!--<img src="img/weigthIcon.png" class="icon non-ionic-icon" alt="Photo">-->
+            </ion-item>
+          </ion-list>
+        </ion-content>
+      </ion-side-menu-content>
+
+      <my-side-menu></my-side-menu>
+    </ion-side-menus>
+  </ion-pane>
+</ion-view>

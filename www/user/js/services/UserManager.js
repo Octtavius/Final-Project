@@ -10,7 +10,15 @@ function UserManager(userDb, $rootScope) {
     userDb.syncDb()
   };
 
+  var getAllCars = function (callback) {
+    userDb.getAllCars(function (allCars) {
+      callback(allCars);
+    });
+
+  };
+
   return {
-    addToList: addCarToList
+    addToList: addCarToList,
+    getAllCars: getAllCars
   };
 }
