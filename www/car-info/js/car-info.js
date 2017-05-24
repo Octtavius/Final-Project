@@ -2,7 +2,13 @@ angular.module('starter')
   .controller("carInfoCtrl", function ($q, $scope, $rootScope, Data, $state, $ionicHistory, authService, $ionicPopup, UserManager) {
     $scope.title = "NEW PAGE !";
     var carId = $state.params.id;
-
+    $scope.carAdded = false;
+    $scope.showLoadingIcon = false
+    $scope.$on('$ionicView.beforeEnter', function(){
+      UserManager.checkCarAdded(carId, function (isAdded) {
+        $scope.carAdded = isAdded;
+      });
+    });
     var confirmPopup;
 
     var signUp = function () {
@@ -77,6 +83,7 @@ angular.module('starter')
 
     //save car info to local and remote db
     $scope.saveBookmark = function () {
+      $scope.showLoadingIcon = true;
       if(window.Connection) {
         if(navigator.connection.type == Connection.NONE) {
           $ionicPopup.alert({
@@ -85,7 +92,7 @@ angular.module('starter')
           })
         }
         else{
-          console.log("connection to server: ");
+          console.log("connection to server:  ");
 
           //check if is logged in and get back some anwser
           authService.isLoggedIn(function (response) {
@@ -97,7 +104,13 @@ angular.module('starter')
             }
             else if(response.userCtx.name){
               $rootScope.user = {email: response.userCtx.name};
-              UserManager.addToList($scope.car);
+              UserManager.addToList($scope.car, function (data) {
+                $scope.showLoadingIcon = false;
+
+                $scope.carAdded = true;
+
+                console.log("the car should be added: . " + data);
+              });
               console.log("somebody  is logged in: ", response.userCtx.name);
               console.log("somebody  is logged in: ", $rootScope.user.email);
             }

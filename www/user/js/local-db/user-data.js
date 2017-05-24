@@ -7,7 +7,7 @@ function userDb($q, $rootScope) {
   var _cars;
 
 
-  function addCar(car, user) {
+  function addCar(car, user, callback) {
     if(!isInit()){
       initDB()
     };
@@ -30,6 +30,7 @@ function userDb($q, $rootScope) {
             _rev: doc._rev,
             favList: doc.favList
           });
+          callback("success")
         }
       }
     }).catch(function (err) {
@@ -37,6 +38,7 @@ function userDb($q, $rootScope) {
       if(err.status === 404) {
         $q.when(_db.post({_id: user.email, favList: [car]}));
       }
+     callback("error")
     }))
     // return $q.when(_db.post({_id: user.email, favList: [car]}));
   };
