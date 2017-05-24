@@ -1,0 +1,17 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class = "title">Modal Title</h1>
+  </ion-header-bar>
+
+  <ion-content>
+
+    <div class="modal image-modal transparent" ng-click="closeModal()">
+      <ion-pane class="transparent">
+        <img ng-src="{{theSrc}}"/>
+      </ion-pane>
+    </div>
+
+    <button class = "button icon icon-left ion-ios-close-outline"
+            ng-click = "closeModal()">Close Modal</button>
+  </ion-content>
+</ion-modal-view>

@@ -153,7 +153,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
         url: "/contact",
         views: {
           'contact-tab': {
-            templateUrl: "templates/photo-gallery.html",
+            templateUrl: "photo-gallery/templates/photo-gallery.html",
             controller: "GalleryCtrl"
           }
         }
@@ -232,20 +232,6 @@ angular.module('starter', ['ionic', 'ngCordova', 'ngStorage', 'LocalStorageModul
       });
     }
 
-  })
-  .controller("GalleryCtrl", function ($scope, cam, StorageService) {
-    $scope.title = "My Photos";
-    $scope.allpic = [];
-
-    //when screen page is loaded, display somehting to console
-    // $scope.$on('$ionicView.afterEnter', function(){
-    console.log("After Entered Interactive Guide");
-    $scope.allpic = cam.getAllFotos;
-    // $scope.allpic = ["A7", "mercedes1", "tesla_model_s", "volkswagen_beetle", "wheelSystem", "temp"];
-    // $scope.allpic = ["DSC_0062", "DSC_0063", "DSC_0064", "DSC_0065", "DSC_0066"];
-    // console.log($scope.allpic.length);
-    $scope.things = StorageService.getAll();
-    console.log($scope.things.length);
   })
   .controller("AllCarsCtrl", function ($scope, Data, authService) {
     $scope.title = "All Cars";

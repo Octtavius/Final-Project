@@ -7,11 +7,11 @@
           <ion-list id="photoGallery">
             <div ng-repeat="pic in things">
               <div class="row" ng-if="$even">
-                <ion-item class="col">
-                  <img src="{{pic}}" class="icon" alt="Photo" temp>
+                <ion-item class="col" open-picture>
+                  <img src="{{pic}}" class="icon" alt="Photo" img-size-service>
                 </ion-item>
-                <ion-item class="col">
-                  <img src="{{things[$index+1]}}" class="icon" alt="Photo" temp>
+                <ion-item class="col" ng-if="$index !== things.length-1"  open-picture>
+                  <img src="{{things[$index+1]}}" class="icon" alt="Photo" img-size-service>
                 </ion-item>
               </div>
             </div>
